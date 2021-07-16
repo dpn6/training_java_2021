@@ -3,10 +3,15 @@
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output-test url="file://$MODULE_DIR$/../../sandbox/out/test/classes" />
     <exclude-output />
-    <content url="file://$MODULE_DIR$/../../sandbox/src/test" />
+    <content url="file://$MODULE_DIR$/../../sandbox/src/test">
+      <sourceFolder url="file://$MODULE_DIR$/../../sandbox/src/test/Java" isTestSource="true" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="sandbox.main" />
+    <orderEntry type="library" name="Gradle: org.testng:testng:7.4.0" level="project" />
+    <orderEntry type="library" name="Gradle: com.beust:jcommander:1.78" level="project" />
+    <orderEntry type="library" name="Gradle: org.webjars:jquery:3.5.1" level="project" />
   </component>
   <component name="TestModuleProperties" production-module="sandbox.main" />
 </module>
