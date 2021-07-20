@@ -11,7 +11,7 @@ import org.testng.annotations.BeforeMethod;
 import java.util.concurrent.TimeUnit;
 
 public class TestBase {
-  private WebDriver wd;
+  WebDriver wd;
 
   @BeforeMethod(alwaysRun = true)
   public void setUp(){
@@ -27,7 +27,7 @@ public class TestBase {
     wd.findElement(By.name("user")).sendKeys(username);
     wd.findElement(By.name("pass")).clear();
     wd.findElement(By.name("pass")).sendKeys(password);
-    wd.findElement(By.id("LoginForm")).submit();
+    wd.findElement(By.xpath("//input[@value='Login']")).click();
   }
 
   protected void returnToGroupPage() {
@@ -78,5 +78,13 @@ public class TestBase {
     } catch (NoAlertPresentException e) {
       return false;
     }
+  }
+
+  protected void deleteSelectedGroups() {
+    wd.findElement(By.name("delete")).click();
+  }
+
+  protected void selectGroup() {
+    wd.findElement(By.name("selected[]")).click();
   }
 }
