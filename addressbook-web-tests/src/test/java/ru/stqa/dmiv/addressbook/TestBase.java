@@ -113,4 +113,12 @@ public class TestBase {
   protected void initContactCreation() {
     wd.findElement(By.linkText("add new")).click();
   }
+
+  protected void deleteSelectedContact() {
+    wd.findElement(By.xpath("//input[@value='Delete']")).click();
+  }
+
+  protected void selectContact() {
+    wd.findElement(By.id("6")).click();
+  }
 }
