@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import ru.stqa.dmiv.addressbook.model.GroupData;
 
-public class GroupHelper extends HelperBase{
+public class GroupHelper extends HelperBase {
 
   public GroupHelper(WebDriver wd) {
     super(wd);
@@ -42,5 +42,20 @@ public class GroupHelper extends HelperBase{
 
   public void submitGroupModification() {
     click(By.name("update"));
+  }
+
+  public boolean isThereAGroup() {
+    if (isElementPresent(By.name("selected[]"))) {
+      return true;
+    }
+    return false;
+  }
+
+  public void createGroup(GroupData groupData) {
+    initGroupCreation();
+//    fillGroupForm(new GroupData("test1", "test2", "test3"));
+    fillGroupForm(groupData);
+    submitGroupCreation();
+    returnToGroupPage();
   }
 }
