@@ -10,7 +10,7 @@ public class ContactHelper extends HelperBase{
     super(wd);
   }
 
-  public void gotoHomePage() {
+  public void returnHomePage() {
     click(By.linkText("home page"));
   }
 
@@ -42,4 +42,19 @@ public class ContactHelper extends HelperBase{
   public void submitContactModification() {
     click(By.name("update"));
   }
+
+  public boolean isThereAContact() {
+    if(isElementPresent(By.name("selected[]"))){
+      return true;
+    }
+    return false;
+   }
+
+  public void creationContact(ContactData contactData) {
+    initContactCreation();
+    fillContactForm(contactData);
+    returnHomePage();
+  }
+
+
 }
