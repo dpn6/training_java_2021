@@ -55,6 +55,4 @@ public class ContactHelper extends HelperBase{
     fillContactForm(contactData);
     returnHomePage();
   }
-
-
 }
