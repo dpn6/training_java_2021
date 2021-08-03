@@ -1,5 +1,6 @@
 package ru.stqa.dmiv.addressbook.tests;
 
+import org.testng.Assert;
 import org.testng.annotations.Test;
 import ru.stqa.dmiv.addressbook.model.GroupData;
 
@@ -13,9 +14,13 @@ public class GroupDeletionTests extends TestBase{
     if (!app.getGroupHelper().isThereAGroup()){
       app.getGroupHelper().createGroup(new GroupData("test1", null, null));
     }
-    List<GroupData> before =  app.getGroupHelper().getGroups();
-    app.getGroupHelper().selectGroup();
+    List<GroupData> before =  app.getGroupHelper().getGroupList();
+    int lastIdx = before.size()-1;
+    app.getGroupHelper().selectGroup(before.size()-1);
     app.getGroupHelper().deleteSelectedGroups();
     app.getGroupHelper().returnToGroupPage();
+    List<GroupData> after =  app.getGroupHelper().getGroupList();
+    before.remove(lastIdx);
+    Assert.assertEquals(before, after);
   }
 }

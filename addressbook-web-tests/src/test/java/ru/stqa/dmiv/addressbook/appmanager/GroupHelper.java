@@ -36,7 +36,7 @@ public class GroupHelper extends HelperBase {
     click(By.name("delete"));
   }
 
-  public void selectGroup() {
+  public void selectGroup(int idx) {
     click(By.name("selected[]"));
   }
 
@@ -62,13 +62,15 @@ public class GroupHelper extends HelperBase {
     returnToGroupPage();
   }
 
-  public List<GroupData> getGroups() {
+  public List<GroupData> getGroupList() {
     List<GroupData> groups = new ArrayList<>();
     for (WebElement element : wd.findElements(By.cssSelector("span.group")))
     {
-      GroupData groupData = new GroupData(element.getText(), null, null);
+      String value = element.findElement(By.tagName("input")).getAttribute("value");
+      GroupData groupData = new GroupData(Integer.parseInt(value), element.getText(), null, null);
       groups.add(groupData);
     }
     return groups;
   }
+
 }
