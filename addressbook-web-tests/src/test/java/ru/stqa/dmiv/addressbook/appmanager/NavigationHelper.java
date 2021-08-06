@@ -3,7 +3,7 @@ package ru.stqa.dmiv.addressbook.appmanager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
-public class NavigationHelper extends HelperBase{
+public class NavigationHelper extends HelperBase {
 
   public NavigationHelper(WebDriver wd) {
     super(wd);
@@ -14,6 +14,8 @@ public class NavigationHelper extends HelperBase{
   }
 
   public void gotoContactPage() {
-    click(By.linkText("home"));
+    if (! isElementPresent(By.id("maintable"))) {
+      click(By.linkText("home"));
+    }
   }
 }

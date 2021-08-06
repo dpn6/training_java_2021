@@ -1,5 +1,7 @@
 package ru.stqa.dmiv.addressbook.model;
 
+import java.util.Objects;
+
 public class ContactData {
 
   private int id;
@@ -49,5 +51,19 @@ public class ContactData {
 
   public String getEmail() {
     return email;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof ContactData)) return false;
+    ContactData that = (ContactData) o;
+    return Objects.equals(firstname, that.firstname) &&
+            Objects.equals(lastname, that.lastname);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(firstname, lastname);
   }
 }
