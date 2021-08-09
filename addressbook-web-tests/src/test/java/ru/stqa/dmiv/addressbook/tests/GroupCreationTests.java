@@ -11,16 +11,16 @@ public class GroupCreationTests extends TestBase {
 
   @Test
   public void testGroupCreation(){
-    app.getNavigationHelper().gotoGroupPage();
-    List<GroupData> before = app.getGroupHelper().getGroupList();
+    app.goTo().groupPage();
+    List<GroupData> before = app.group().list();
     GroupData newGroup = new GroupData("test1", "test2", "test3");
-    app.getGroupHelper().createGroup(newGroup);
+    app.group().create(newGroup);
+
     before.add(newGroup);
     Comparator<? super GroupData> comparatorById = (g1, g2) -> Integer.compare(g1.getId(), g2.getId());
     before.sort(comparatorById);
-    List<GroupData> after = app.getGroupHelper().getGroupList();
+    List<GroupData> after = app.group().list();
     after.sort(comparatorById);
-
     Assert.assertEquals(after, before);
   }
 }

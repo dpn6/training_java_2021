@@ -11,7 +11,7 @@ public class ContactDeletionTests extends TestBase {
   @Test
   public void testContactDeletionTests() throws InterruptedException {
 
-    app.getNavigationHelper().gotoContactPage();
+    app.goTo().gotoContactPage();
     if (!app.getContactHelper().isThereAContact()){
       app.getContactHelper().creationContact(new ContactData("test1", "test2", "Novosibirsk", null, null));
     }
@@ -20,7 +20,7 @@ public class ContactDeletionTests extends TestBase {
     app.getContactHelper().selectContact(lastIdx);
     app.getContactHelper().deleteSelectedContact();
     app.getContactHelper().closeAlertAccept();
-    app.getNavigationHelper().gotoContactPage();
+    app.goTo().gotoContactPage();
     List<ContactData> after =  app.getContactHelper().getContactList();
     before.remove(lastIdx);
 
