@@ -6,7 +6,9 @@ import org.openqa.selenium.WebElement;
 import ru.stqa.dmiv.addressbook.model.GroupData;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class GroupHelper extends HelperBase {
 
@@ -36,8 +38,8 @@ public class GroupHelper extends HelperBase {
     click(By.name("delete"));
   }
 
-  public void selectGroup(int idx) {
-    wd.findElements(By.name("selected[]")).get(idx).click();
+  public void selectGroup(int id) {
+    wd.findElement(By.cssSelector("input[value = '" + id +  "']")).click();
   }
 
   public void initGroupModification() {
@@ -62,16 +64,16 @@ public class GroupHelper extends HelperBase {
     returnToGroupPage();
   }
 
-  public void delete(int lastIdx) {
-    selectGroup(lastIdx);
+  public void delete(GroupData group) {
+    selectGroup(group.getId());
     deleteSelectedGroups();
     returnToGroupPage();
   }
 
-  public void modify(int lastIdx, GroupData groupData) {
-    selectGroup(lastIdx);
+  public void modify(GroupData group) {
+    selectGroup(group.getId());
     initGroupModification();
-    fillGroupForm(groupData);
+    fillGroupForm(group);
     submitGroupModification();
     returnToGroupPage();
   }
@@ -86,4 +88,13 @@ public class GroupHelper extends HelperBase {
     return groups;
   }
 
+  public Set<GroupData> all() {
+    Set<GroupData> groups = new HashSet<>();
+    for (WebElement element : wd.findElements(By.cssSelector("span.group"))) {
+      String value = element.findElement(By.tagName("input")).getAttribute("value");
+      GroupData groupData = new GroupData().withId(Integer.parseInt(value)).withName(element.getText());
+      groups.add(groupData);
+    }
+    return groups;
+  }
 }
