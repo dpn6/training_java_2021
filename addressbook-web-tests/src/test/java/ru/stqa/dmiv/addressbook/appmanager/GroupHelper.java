@@ -51,13 +51,6 @@ public class GroupHelper extends HelperBase {
     click(By.name("update"));
   }
 
-  public boolean isThereAGroup() {
-    if (isElementPresent(By.name("selected[]"))) {
-      return true;
-    }
-    return false;
-  }
-
   public void create(GroupData groupData) {
     initGroupCreation();
     fillGroupForm(groupData);
@@ -77,16 +70,6 @@ public class GroupHelper extends HelperBase {
     fillGroupForm(group);
     submitGroupModification();
     returnToGroupPage();
-  }
-
-  public List<GroupData> list() {
-    List<GroupData> groups = new ArrayList<>();
-    for (WebElement element : wd.findElements(By.cssSelector("span.group"))) {
-      String value = element.findElement(By.tagName("input")).getAttribute("value");
-      GroupData groupData = new GroupData().withId(Integer.parseInt(value)).withName(element.getText());
-      groups.add(groupData);
-    }
-    return groups;
   }
 
   public Groups all() {

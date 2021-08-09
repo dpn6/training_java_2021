@@ -1,22 +1,23 @@
 package ru.stqa.dmiv.addressbook.tests;
 
-import org.testng.Assert;
 import org.testng.annotations.Test;
 import ru.stqa.dmiv.addressbook.model.ContactData;
+import ru.stqa.dmiv.addressbook.model.Contacts;
 
-import java.util.Set;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ContactCreationTests extends TestBase {
 
   @Test
-  public void testContactCreation() throws InterruptedException {
+  public void testContactCreation() {
     app.goTo().contactPage();
-    Set<ContactData> before =  app.contact().all();
+    Contacts before =  app.contact().all();
     ContactData newContact = new ContactData().withLastname("test1").withFirstname("test2").withAddress("test3").withMobile("222").withEmail("polina@mail.ru");
     app.contact().create(newContact);
-    Set<ContactData> after =  app.contact().all();
+    Contacts after =  app.contact().all();
     before.add(newContact.withId(after.stream().mapToInt(c -> c.getId()).max().getAsInt()));
-
-    Assert.assertEquals(after, before);
+    assertThat(after, equalTo(before.
+                    withAdded(newContact.withId(after.stream().mapToInt(c -> c.getId()).max().getAsInt()))));
   }
 }
