@@ -18,12 +18,11 @@ public class ContactDeletionTests extends TestBase {
   }
 
   @Test
-  public void testContactDeletionTests() throws InterruptedException {
+  public void testContactDeletionTests(){
     Contacts before = app.contact().all();
     ContactData deletedContact = before.iterator().next();
     app.contact().delete(deletedContact);
     app.goTo().contactPage();
-    Thread.sleep(2000 * before.size());
     Contacts after = app.contact().all();
     MatcherAssert.assertThat(after, CoreMatchers.equalTo(before.without(deletedContact)));
   }

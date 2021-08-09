@@ -75,6 +75,18 @@ public class ContactHelper extends HelperBase {
     selectContact(contact.getId());
     deleteSelectedContact();
     closeAlertAccept();
+    waitMessage();
+  }
+
+  private void waitMessage() {
+    try {
+      while (!isElementPresent(By.cssSelector(".msgbox"))) {
+        System.out.println("Ждемс...");
+        Thread.sleep(10);
+      }
+    } catch (InterruptedException e) {
+      System.out.println("InterruptedException");
+    }
   }
 
   public Contacts all() {
