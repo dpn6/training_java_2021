@@ -9,6 +9,18 @@ public class ContactData {
   private String lastname;
   private String address;
 
+  @Override
+  public String toString() {
+    return "ContactData{" +
+            "id=" + id +
+            ", firstname='" + firstname + '\'' +
+            ", lastname='" + lastname + '\'' +
+            ", address='" + address + '\'' +
+            ", mobile='" + mobile + '\'' +
+            ", email='" + email + '\'' +
+            '}';
+  }
+
   public ContactData withId(int id) {
     this.id = id;
     return this;
@@ -91,12 +103,13 @@ public class ContactData {
     if (this == o) return true;
     if (!(o instanceof ContactData)) return false;
     ContactData that = (ContactData) o;
-    return Objects.equals(firstname, that.firstname) &&
+    return id == that.id &&
+            Objects.equals(firstname, that.firstname) &&
             Objects.equals(lastname, that.lastname);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(firstname, lastname);
+    return Objects.hash(id, firstname, lastname);
   }
 }

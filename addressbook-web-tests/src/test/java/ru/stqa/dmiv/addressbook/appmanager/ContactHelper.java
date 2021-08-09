@@ -6,7 +6,9 @@ import org.openqa.selenium.WebElement;
 import ru.stqa.dmiv.addressbook.model.ContactData;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ContactHelper extends HelperBase {
 
@@ -35,8 +37,8 @@ public class ContactHelper extends HelperBase {
     click(By.xpath("//input[@value='Delete']"));
   }
 
-  public void selectContact(int idx) {
-    wd.findElements(By.name("selected[]")).get(idx).click();
+  public void selectContact(int id) {
+    wd.findElement(By.cssSelector("input[value = '" + id + "']")).click();
   }
 
   public void initContactModification() {
@@ -60,22 +62,23 @@ public class ContactHelper extends HelperBase {
     returnHomePage();
   }
 
-  public void modify(int lastIdx, ContactData modifiedContact) {
-    selectContact(lastIdx);
+  public void modify(ContactData contact) {
+    selectContact(contact.getId());
     initContactModification();
-    fillContactForm(modifiedContact);
+    fillContactForm(contact);
     submitContactModification();
     returnHomePage();
   }
 
-  public void delete(int lastIdx) {
-    selectContact(lastIdx);
+  public void delete(ContactData contact) {
+    selectContact(contact.getId());
     deleteSelectedContact();
     closeAlertAccept();
   }
 
-  public List<ContactData> list() {
-    List<ContactData> contactDataList = new ArrayList<>();
+  public Set<ContactData> all() {
+    Set<ContactData> contactDataList = new HashSet<>();
+
     List<WebElement> elements = wd.findElements(By.name("entry"));
     for (WebElement el : elements) {
       int id = Integer.parseInt(el.findElement(By.name("selected[]")).getAttribute("value"));

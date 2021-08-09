@@ -4,22 +4,19 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 import ru.stqa.dmiv.addressbook.model.ContactData;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.Set;
 
 public class ContactCreationTests extends TestBase {
 
   @Test
-  public void testContactCreation() {
+  public void testContactCreation() throws InterruptedException {
     app.goTo().contactPage();
-    List<ContactData> before =  app.contact().list();
+    Set<ContactData> before =  app.contact().all();
     ContactData newContact = new ContactData().withLastname("test1").withFirstname("test2").withAddress("test3").withMobile("222").withEmail("polina@mail.ru");
     app.contact().create(newContact);
-    List<ContactData> after =  app.contact().list();
-    before.add(newContact);
-    Comparator<? super ContactData> comparatorById = (c1, c2) -> Integer.compare(c1.getId(), c2.getId());
-    before.sort(comparatorById);
-    after.sort(comparatorById);
+    Set<ContactData> after =  app.contact().all();
+    before.add(newContact.withId(after.stream().mapToInt(c -> c.getId()).max().getAsInt()));
+
     Assert.assertEquals(after, before);
   }
 }
