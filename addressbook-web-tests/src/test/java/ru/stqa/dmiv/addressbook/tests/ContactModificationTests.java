@@ -10,11 +10,12 @@ import java.util.List;
 
 public class ContactModificationTests extends TestBase {
 
+
   @BeforeMethod
   void precondition(){
     app.goTo().contactPage();
     if (app.contact().list().size() == 0){
-      app.contact().create(new ContactData("test1", "test2", "Novosibirsk", null, null));
+      app.contact().create(new ContactData().withLastname("test1").withFirstname("test2").withAddress("Novosibirsk"));
     }
   }
 
@@ -23,7 +24,7 @@ public class ContactModificationTests extends TestBase {
     List<ContactData> before =  app.contact().list();
     int lastIdx = before.size()-1;
     int id = before.get(lastIdx).getId();
-    ContactData modifiedContact = new ContactData(id,"lastname", "name", "test3", "222", "polina@mail.ru");
+    ContactData modifiedContact = new ContactData().withId(id).withLastname("lastname").withFirstname("name").withAddress("test3").withMobile("222").withEmail("polina@mail.ru");
 
     app.contact().modify(lastIdx, modifiedContact);
 
