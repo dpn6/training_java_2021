@@ -11,11 +11,11 @@ public class ContactCreationTests extends TestBase {
 
   @Test
   public void testContactCreation() {
-    app.goTo().gotoContactPage();
-    List<ContactData> before =  app.getContactHelper().getContactList();
+    app.goTo().contactPage();
+    List<ContactData> before =  app.contact().list();
     ContactData newContact = new ContactData("test1", "test2", "test3", "222", "polina@mail.ru");
-    app.getContactHelper().creationContact(newContact);
-    List<ContactData> after =  app.getContactHelper().getContactList();
+    app.contact().create(newContact);
+    List<ContactData> after =  app.contact().list();
     before.add(newContact);
     Comparator<? super ContactData> comparatorById = (c1, c2) -> Integer.compare(c1.getId(), c2.getId());
     before.sort(comparatorById);

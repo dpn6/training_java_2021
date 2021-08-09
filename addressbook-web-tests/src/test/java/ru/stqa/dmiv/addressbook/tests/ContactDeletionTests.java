@@ -1,6 +1,7 @@
 package ru.stqa.dmiv.addressbook.tests;
 
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.dmiv.addressbook.model.ContactData;
 
@@ -8,22 +9,25 @@ import java.util.List;
 
 public class ContactDeletionTests extends TestBase {
 
+  @BeforeMethod
+  void precondition(){
+    app.goTo().contactPage();
+    if (app.contact().list().size() == 0){
+      app.contact().create(new ContactData("test1", "test2", "Novosibirsk", null, null));
+    }
+  }
+
   @Test
   public void testContactDeletionTests() throws InterruptedException {
-
-    app.goTo().gotoContactPage();
-    if (!app.getContactHelper().isThereAContact()){
-      app.getContactHelper().creationContact(new ContactData("test1", "test2", "Novosibirsk", null, null));
-    }
-    List<ContactData> before =  app.getContactHelper().getContactList();
+    List<ContactData> before =  app.contact().list();
     int lastIdx = before.size()-1;
-    app.getContactHelper().selectContact(lastIdx);
-    app.getContactHelper().deleteSelectedContact();
-    app.getContactHelper().closeAlertAccept();
-    app.goTo().gotoContactPage();
-    List<ContactData> after =  app.getContactHelper().getContactList();
-    before.remove(lastIdx);
+    app.contact().delete(lastIdx);
+    app.goTo().contactPage();
 
+    List<ContactData> after =  app.contact().list();
+    before.remove(lastIdx);
     Assert.assertEquals(after, before);
   }
+
+
 }

@@ -54,13 +54,27 @@ public class ContactHelper extends HelperBase {
     return false;
   }
 
-  public void creationContact(ContactData contactData) {
+  public void create(ContactData contactData) {
     initContactCreation();
     fillContactForm(contactData);
     returnHomePage();
   }
 
-  public List<ContactData> getContactList() {
+  public void modify(int lastIdx, ContactData modifiedContact) {
+    selectContact(lastIdx);
+    initContactModification();
+    fillContactForm(modifiedContact);
+    submitContactModification();
+    returnHomePage();
+  }
+
+  public void delete(int lastIdx) {
+    selectContact(lastIdx);
+    deleteSelectedContact();
+    closeAlertAccept();
+  }
+
+  public List<ContactData> list() {
     List<ContactData> contactDataList = new ArrayList<>();
     List<WebElement> elements = wd.findElements(By.name("entry"));
     for (WebElement el : elements) {
