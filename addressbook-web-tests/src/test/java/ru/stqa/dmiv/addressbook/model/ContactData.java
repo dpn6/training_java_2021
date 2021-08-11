@@ -11,7 +11,6 @@ public class ContactData {
   private String homePhone;
 
 
-
   private String mobile;
   private String workPhone;
   private String email;
@@ -94,6 +93,15 @@ public class ContactData {
   public String getEmail() {
     return email;
   }
+
+  public String getHomePhone() {
+    return homePhone;
+  }
+
+  public String getWorkPhone() {
+    return workPhone;
+  }
+
 
   @Override
   public boolean equals(Object o) {
