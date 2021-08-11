@@ -2,15 +2,10 @@ package ru.stqa.dmiv.addressbook.tests;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.MatcherAssert;
-import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.dmiv.addressbook.model.ContactData;
 import ru.stqa.dmiv.addressbook.model.Contacts;
-
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
 
 public class ContactModificationTests extends TestBase {
 
