@@ -103,10 +103,10 @@ public class ContactHelper extends HelperBase {
       String firstName = cells.get(2).getText();
       String address = cells.get(3).getText();
       String email = cells.get(4).findElement(By.tagName("a")).getText();
-      String[] phones = cells.get(5).getText().split("\n");
+      String phones = cells.get(5).getText();
 
       ContactData contactData = new ContactData().withId(id).withLastname(lastName).withFirstname(firstName)
-              .withAddress(address).withHomePhone(phones[0]).withMobile(phones[1]).withWorkPhone(phones[2]).withEmail(email);
+              .withAddress(address).withAllPhones(phones).withEmail(email);
       contactDataList.add(contactData);
     }
     return contactDataList;

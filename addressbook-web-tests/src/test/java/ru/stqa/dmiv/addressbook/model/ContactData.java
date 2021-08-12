@@ -9,10 +9,9 @@ public class ContactData {
   private String lastname;
   private String address;
   private String homePhone;
-
-
   private String mobile;
   private String workPhone;
+  private String allPhones;
   private String email;
 
   @Override
@@ -67,6 +66,11 @@ public class ContactData {
     return this;
   }
 
+  public ContactData withAllPhones(String allPhones) {
+    this.allPhones = allPhones;
+    return this;
+  }
+
   public ContactData() {
   }
 
@@ -100,6 +104,10 @@ public class ContactData {
 
   public String getWorkPhone() {
     return workPhone;
+  }
+
+  public String getAllPhones() {
+    return allPhones;
   }
 
 
