@@ -6,26 +6,31 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.stqa.dmiv.addressbook.model.ContactData;
 
-import static org.hamcrest.CoreMatchers.*;
-import static org.hamcrest.MatcherAssert.*;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
-public class ContactAddressTests extends TestBase {
+public class ContactEmailTests extends TestBase {
 
   @BeforeMethod
   void precondition() {
     app.goTo().contactPage();
     if (app.contact().all().size() == 0) {
       app.contact().create(new ContactData().withLastname("test1").withFirstname("test2")
-              .withAddress("(333333) Novosibirsk\nLenina 8/1"));
+              .withEmail("email@main.ru").withEmail3("email3@main.ru"));
     }
   }
 
   @Test
-  void testContactAddress(){
+  void testContactEmail(){
     app.goTo().contactPage();
     ContactData contact = app.contact().all().iterator().next();
-
     ContactData contactInfoFormEdit = app.contact().infoFromEdit(contact);
-    assertThat(contact.getAddress(), equalTo(contactInfoFormEdit.getAddress()));
+
+    MatcherAssert.assertThat(contact.getAllEmails(), CoreMatchers.equalTo(merge(contactInfoFormEdit)));
+  }
+
+  private String merge(ContactData contact) {
+    return Arrays.asList(contact.getEmail(), contact.getEmail2(), contact.getEmail3()).stream().filter(s -> !s.isEmpty())
+            .collect(Collectors.joining("\n"));
   }
 }

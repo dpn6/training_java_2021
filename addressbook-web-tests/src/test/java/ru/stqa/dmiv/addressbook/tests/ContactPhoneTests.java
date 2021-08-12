@@ -18,7 +18,8 @@ public class ContactPhoneTests extends TestBase {
   void precondition() {
     app.goTo().contactPage();
     if (app.contact().all().size() == 0) {
-      app.contact().create(new ContactData().withLastname("test1").withFirstname("test2").withAddress("Novosibirsk"));
+      app.contact().create(new ContactData().withLastname("test1").withFirstname("test2")
+              .withHomePhone("8(38341)5-10-12").withWorkPhone("+911"));
     }
   }
 
