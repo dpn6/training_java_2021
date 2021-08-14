@@ -3,6 +3,7 @@ package ru.stqa.dmiv.addressbook.generators;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
+import com.google.gson.Gson;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamInclude;
 import ru.stqa.dmiv.addressbook.model.GroupData;
@@ -40,22 +41,41 @@ public class GroupDataGenerator {
 
   private void run() throws IOException {
     List<GroupData> groups = generate(count);
-    save(groups, new File(file));
+    if (format.equals("csv")) {
+      save(groups, new File(file));
+    } else if (format.equals("xml")) {
+      saveAsXml(groups, new File(file));
+    } else if (format.equals("json")) {
+      saveAsJson(groups, new File(file));
+    } else {
+      System.out.println(String.format("format %s is unrecognized", format));
+    }
   }
 
   private void save(List<GroupData> groups, File file) throws IOException {
     Writer writer = new FileWriter(file);
     for (GroupData group : groups) {
-      if (format.equals("csv")) {
-        writer.write(String.format("%s; %s; %s\n", group.getName(), group.getHeader(), group.getFooter()));
-      } else if (format.equals("xml")) {
-        XStream xStream = new XStream();
-        xStream.processAnnotations(GroupData.class);
-        xStream.toXML(group, writer);
-      } else {
-        System.out.println(String.format("Format %s is unrecognized", format));
-      }
+      writer.write(String.format("%s; %s; %s\n", group.getName(), group.getHeader(), group.getFooter()));
     }
+    writer.close();
+  }
+
+  private void saveAsXml(List<GroupData> groups, File file) throws IOException {
+    Writer writer = new FileWriter(file);
+
+      XStream xStream = new XStream();
+      xStream.processAnnotations(GroupData.class);
+      xStream.toXML(groups, writer);
+
+    writer.close();
+  }
+
+  private void saveAsJson(List<GroupData> groups, File file) throws IOException {
+    Writer writer = new FileWriter(file);
+
+      Gson gson = new Gson();
+      gson.toJson(groups, writer);
+
     writer.close();
   }
 
