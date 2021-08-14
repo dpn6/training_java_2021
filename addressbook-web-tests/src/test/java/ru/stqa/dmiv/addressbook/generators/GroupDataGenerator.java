@@ -3,6 +3,8 @@ package ru.stqa.dmiv.addressbook.generators;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.annotations.XStreamInclude;
 import ru.stqa.dmiv.addressbook.model.GroupData;
 
 import java.io.File;
@@ -17,8 +19,11 @@ public class GroupDataGenerator {
   @Parameter(names = {"-c", "count"}, description = "Groups count")
   int count;
 
-  @Parameter(names = {"-f", "file"}, description = "file path")
+  @Parameter(names = {"-f", "file"}, description = "File path")
   String file;
+
+  @Parameter(names = {"-d", "format"}, description = "Data format")
+  String format;
 
   public static void main(String[] args) throws IOException {
     GroupDataGenerator generator = new GroupDataGenerator();
@@ -27,7 +32,7 @@ public class GroupDataGenerator {
               .addObject(generator)
               .build()
               .parse(args);
-    }catch (ParameterException e){
+    } catch (ParameterException e) {
       e.getJCommander().usage();
     }
     generator.run();
@@ -41,7 +46,15 @@ public class GroupDataGenerator {
   private void save(List<GroupData> groups, File file) throws IOException {
     Writer writer = new FileWriter(file);
     for (GroupData group : groups) {
-      writer.write(String.format("%s; %s; %s\n", group.getName(), group.getHeader(), group.getFooter()));
+      if (format.equals("csv")) {
+        writer.write(String.format("%s; %s; %s\n", group.getName(), group.getHeader(), group.getFooter()));
+      } else if (format.equals("xml")) {
+        XStream xStream = new XStream();
+        xStream.processAnnotations(GroupData.class);
+        xStream.toXML(group, writer);
+      } else {
+        System.out.println(String.format("Format %s is unrecognized", format));
+      }
     }
     writer.close();
   }
