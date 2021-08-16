@@ -4,6 +4,7 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.annotations.XStreamInclude;
 import ru.stqa.dmiv.addressbook.model.GroupData;
@@ -62,20 +63,16 @@ public class GroupDataGenerator {
 
   private void saveAsXml(List<GroupData> groups, File file) throws IOException {
     Writer writer = new FileWriter(file);
-
-      XStream xStream = new XStream();
-      xStream.processAnnotations(GroupData.class);
-      xStream.toXML(groups, writer);
-
+    XStream xStream = new XStream();
+    xStream.processAnnotations(GroupData.class);
+    xStream.toXML(groups, writer);
     writer.close();
   }
 
   private void saveAsJson(List<GroupData> groups, File file) throws IOException {
     Writer writer = new FileWriter(file);
-
-      Gson gson = new Gson();
-      gson.toJson(groups, writer);
-
+    Gson gson = new GsonBuilder().setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
+    gson.toJson(groups, writer);
     writer.close();
   }
 
