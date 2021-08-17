@@ -1,0 +1,29 @@
+<list>
+  <contact>
+    <firstname>firstname 0</firstname>
+    <lastname>lastname 0</lastname>
+    <address>address 0</address>
+    <homePhone>555-4440</homePhone>
+    <workPhone>+7(999)11-220</workPhone>
+    <email>my_mail0@ngs.ru</email>
+    <email3>work_mail0@ngs.ru</email3>
+  </contact>
+  <contact>
+    <firstname>firstname 1</firstname>
+    <lastname>lastname 1</lastname>
+    <address>address 1</address>
+    <homePhone>555-4441</homePhone>
+    <workPhone>+7(999)11-221</workPhone>
+    <email>my_mail1@ngs.ru</email>
+    <email3>work_mail1@ngs.ru</email3>
+  </contact>
+  <contact>
+    <firstname>firstname 2</firstname>
+    <lastname>lastname 2</lastname>
+    <address>address 2</address>
+    <homePhone>555-4442</homePhone>
+    <workPhone>+7(999)11-222</workPhone>
+    <email>my_mail2@ngs.ru</email>
+    <email3>work_mail2@ngs.ru</email3>
+  </contact>
+</list>

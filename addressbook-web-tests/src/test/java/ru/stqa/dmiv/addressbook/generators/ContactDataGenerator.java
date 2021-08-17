@@ -3,6 +3,7 @@ package ru.stqa.dmiv.addressbook.generators;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
+import com.thoughtworks.xstream.XStream;
 import ru.stqa.dmiv.addressbook.model.ContactData;
 
 import java.io.File;
@@ -37,13 +38,27 @@ public class ContactDataGenerator {
 
     if (generator.extension.equals("csv")) {
       saveData(contacts, generator.file);
+    } else if (generator.extension.equals("xml")) {
+      saveDataToXml(contacts, generator.file);
+    } else if (generator.extension.equals("json")) {
+      saveData(contacts, generator.file);
+    } else {
+      System.out.println(String.format("Format %s is not recognized", generator.extension));
     }
   }
 
+  private static void saveDataToXml(List<ContactData> contacts, String file) throws IOException {
+    Writer writer = new FileWriter(file);
+    XStream xStream = new XStream();
+    xStream.processAnnotations(ContactData.class);
+    xStream.toXML(contacts, writer);
+    writer.close();
+  }
+
   private static void saveData(List<ContactData> contacts, String file) throws IOException {
-    System.out.println("!!! "+ new File(file).getAbsolutePath());
+    System.out.println("!!! " + new File(file).getAbsolutePath());
     Writer writer = new FileWriter(new File(file));
-    for(ContactData contact : contacts){
+    for (ContactData contact : contacts) {
       String line = String.format("%s;%s;%s;%s;%s;%s;%s;\n", contact.getLastname(), contact.getFirstname(),
               contact.getAddress(), contact.getHomePhone(), contact.getWorkPhone(), contact.getEmail(), contact.getEmail3());
 
