@@ -34,6 +34,8 @@ public class ContactCreationTests extends TestBase {
     System.out.println(photo1.getAbsolutePath());
 
 
+
+
   }
 
 }
