@@ -1,8 +1,8 @@
 package ru.stqa.dmiv.addressbook.model;
 
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
-import com.thoughtworks.xstream.annotations.XStreamInclude;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
 
 import java.io.File;
@@ -20,21 +20,21 @@ public class ContactData {
   private String address;
   @Expose
   private String homePhone;
-  @Expose
+
   private String mobile;
   @Expose
   private String workPhone;
-  @Expose
+
   private String allPhones;
   @Expose
   private String email;
-  @Expose
+
   private String email2;
   @Expose
   private String email3;
-  @Expose
+
   private String allEmails;
-  @Expose
+
   private File photo;
 
 
