@@ -24,35 +24,35 @@ public class ContactCreationTests extends TestBase {
   @Test
   public void testContactCreation() {
     app.goTo().contactPage();
-    Contacts before =  app.contact().all();
+    Contacts before = app.contact().all();
     ContactData newContact = new ContactData().withLastname("test1").withFirstname("test2").withAddress("test3")
             .withMobile("222").withEmail("polina@mail.ru").withPhoto(new File("./src/test/resources/Small2.png"));
     app.contact().create(newContact);
-    Contacts after =  app.contact().all();
+    Contacts after = app.contact().all();
     before.add(newContact.withId(after.stream().mapToInt(c -> c.getId()).max().getAsInt()));
     assertThat(after, equalTo(before.
-                    withAdded(newContact.withId(after.stream().mapToInt(c -> c.getId()).max().getAsInt()))));
+            withAdded(newContact.withId(after.stream().mapToInt(c -> c.getId()).max().getAsInt()))));
   }
 
   @DataProvider
   Iterator<Object[]> validProviderFromJson() throws IOException {
     Gson gson = new Gson();
-    InputStreamReader reader = new InputStreamReader(this.getClass().getResourceAsStream("/contacts.json"));
     List<ContactData> contacts = new ArrayList<>();
-    if (reader.ready()) {
-      contacts = gson.fromJson(reader, new TypeToken<List<ContactData>>() {
-      }.getType());
+    try (InputStreamReader reader = new InputStreamReader(this.getClass().getResourceAsStream("/contacts.json"));) {
+      if (reader.ready()) {
+        contacts = gson.fromJson(reader, new TypeToken<List<ContactData>>() {
+        }.getType());
+      }
     }
-    reader.close();
     return contacts.stream().map(c -> new Object[]{c}).iterator();
   }
 
   @Test(dataProvider = "validProviderFromJson")
   public void testContactCreationFromJson(ContactData newContact) {
     app.goTo().contactPage();
-    Contacts before =  app.contact().all();
+    Contacts before = app.contact().all();
     app.contact().create(newContact);
-    Contacts after =  app.contact().all();
+    Contacts after = app.contact().all();
     before.add(newContact.withId(after.stream().mapToInt(c -> c.getId()).max().getAsInt()));
     assertThat(after, equalTo(before.
             withAdded(newContact.withId(after.stream().mapToInt(c -> c.getId()).max().getAsInt()))));
@@ -61,20 +61,20 @@ public class ContactCreationTests extends TestBase {
   @DataProvider
   Iterator<Object[]> validProviderFromXml() throws IOException {
     List<ContactData> contacts = new ArrayList<>();
-    InputStreamReader reader = new InputStreamReader(this.getClass().getResourceAsStream("/contacts.xml"));
     XStream xStream = new XStream();
     xStream.processAnnotations(ContactData.class);
-    contacts = (List<ContactData>)xStream.fromXML(reader, contacts.getClass());
-    reader.close();
+    try (InputStreamReader reader = new InputStreamReader(this.getClass().getResourceAsStream("/contacts.xml"))) {
+      contacts = (List<ContactData>) xStream.fromXML(reader, contacts.getClass());
+    }
     return contacts.stream().map(c -> new Object[]{c}).iterator();
   }
 
   @Test(dataProvider = "validProviderFromXml")
   public void testContactCreationFromXml(ContactData newContact) {
     app.goTo().contactPage();
-    Contacts before =  app.contact().all();
+    Contacts before = app.contact().all();
     app.contact().create(newContact);
-    Contacts after =  app.contact().all();
+    Contacts after = app.contact().all();
     before.add(newContact.withId(after.stream().mapToInt(c -> c.getId()).max().getAsInt()));
     assertThat(after, equalTo(before.
             withAdded(newContact.withId(after.stream().mapToInt(c -> c.getId()).max().getAsInt()))));
@@ -83,24 +83,24 @@ public class ContactCreationTests extends TestBase {
   @DataProvider
   Iterator<Object[]> validProviderFromCsv() throws IOException {
     List<ContactData> contacts = new ArrayList<>();
-    InputStreamReader reader = new InputStreamReader(this.getClass().getResourceAsStream("/contacts.csv"));
-    BufferedReader br = new BufferedReader((reader));
-    while (br.ready()){
-      String[] lines = br.readLine().split(";");
-      ContactData contact = new ContactData().withLastname(lines[0]).withFirstname(lines[1]).withAddress(lines[2])
-              .withHomePhone(lines[3]).withWorkPhone(lines[4]).withEmail(lines[5]).withEmail3(lines[6]);
-      contacts.add(contact);
+    try (InputStreamReader reader = new InputStreamReader(this.getClass().getResourceAsStream("/contacts.csv"));
+         BufferedReader br = new BufferedReader((reader))) {
+      while (br.ready()) {
+        String[] lines = br.readLine().split(";");
+        ContactData contact = new ContactData().withLastname(lines[0]).withFirstname(lines[1]).withAddress(lines[2])
+                .withHomePhone(lines[3]).withWorkPhone(lines[4]).withEmail(lines[5]).withEmail3(lines[6]);
+        contacts.add(contact);
+      }
     }
-    reader.close();
     return contacts.stream().map(c -> new Object[]{c}).iterator();
   }
 
   @Test(dataProvider = "validProviderFromCsv")
   public void testContactCreationFromCsv(ContactData newContact) {
     app.goTo().contactPage();
-    Contacts before =  app.contact().all();
+    Contacts before = app.contact().all();
     app.contact().create(newContact);
-    Contacts after =  app.contact().all();
+    Contacts after = app.contact().all();
     before.add(newContact.withId(after.stream().mapToInt(c -> c.getId()).max().getAsInt()));
     assertThat(after, equalTo(before.
             withAdded(newContact.withId(after.stream().mapToInt(c -> c.getId()).max().getAsInt()))));
