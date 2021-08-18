@@ -49,7 +49,7 @@ public class GroupDataGenerator {
     } else if (format.equals("json")) {
       saveAsJson(groups, new File(file));
     } else {
-      System.out.println(String.format("format %s is unrecognized", format));
+      System.out.println(String.format("format \"%s\" is unrecognized", format));
     }
   }
 

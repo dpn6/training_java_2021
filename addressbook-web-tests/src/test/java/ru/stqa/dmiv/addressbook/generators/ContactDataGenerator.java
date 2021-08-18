@@ -3,6 +3,8 @@ package ru.stqa.dmiv.addressbook.generators;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.thoughtworks.xstream.XStream;
 import ru.stqa.dmiv.addressbook.model.ContactData;
 
@@ -34,17 +36,25 @@ public class ContactDataGenerator {
     } catch (ParameterException e) {
       e.getJCommander().usage();
     }
-    List<ContactData> contacts = createData(generator.count);
+    List<ContactData> contacts = generate(generator.count);
 
     if (generator.extension.equals("csv")) {
       saveData(contacts, generator.file);
     } else if (generator.extension.equals("xml")) {
       saveDataToXml(contacts, generator.file);
     } else if (generator.extension.equals("json")) {
-      saveData(contacts, generator.file);
+      saveDatatoJson(contacts, generator.file);
     } else {
-      System.out.println(String.format("Format %s is not recognized", generator.extension));
+      System.out.println(String.format("Format \"%s\" is not recognized", generator.extension));
     }
+  }
+
+  private static void saveDatatoJson(List<ContactData> contacts, String file) throws IOException {
+    Writer writer = new FileWriter(file);
+    GsonBuilder builder = new GsonBuilder();
+    Gson gson = builder.setPrettyPrinting().excludeFieldsWithoutExposeAnnotation().create();
+    gson.toJson(contacts, writer);
+    writer.close();
   }
 
   private static void saveDataToXml(List<ContactData> contacts, String file) throws IOException {
@@ -67,7 +77,7 @@ public class ContactDataGenerator {
     writer.close();
   }
 
-  private static List<ContactData> createData(int count) {
+  private static List<ContactData> generate(int count) {
     List<ContactData> list = new ArrayList<>();
     for (int i = 0; i < count; i++) {
       ContactData contact = new ContactData().withLastname(String.format("lastname %s", i))

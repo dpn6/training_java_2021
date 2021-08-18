@@ -1,0 +1,29 @@
+[
+  {
+    "firstname": "firstname 0",
+    "lastname": "lastname 0",
+    "address": "address 0",
+    "homePhone": "555-4440",
+    "workPhone": "+7(999)11-220",
+    "email": "my_mail0@ngs.ru",
+    "email3": "work_mail0@ngs.ru"
+  },
+  {
+    "firstname": "firstname 1",
+    "lastname": "lastname 1",
+    "address": "address 1",
+    "homePhone": "555-4441",
+    "workPhone": "+7(999)11-221",
+    "email": "my_mail1@ngs.ru",
+    "email3": "work_mail1@ngs.ru"
+  },
+  {
+    "firstname": "firstname 2",
+    "lastname": "lastname 2",
+    "address": "address 2",
+    "homePhone": "555-4442",
+    "workPhone": "+7(999)11-222",
+    "email": "my_mail2@ngs.ru",
+    "email3": "work_mail2@ngs.ru"
+  }
+]
