@@ -106,17 +106,4 @@ public class ContactCreationTests extends TestBase {
             withAdded(newContact.withId(after.stream().mapToInt(c -> c.getId()).max().getAsInt()))));
   }
 
-  @Test
-  public void getPileTest(){
-    System.out.println((new File(".").getAbsolutePath()));
-    File photo = new File("/src/test/resources/Small.png");
-    File photo1 = new File("./src/test/resources/Small.png");
-    System.out.println(photo.getAbsolutePath());
-    System.out.println(photo1.getAbsolutePath());
-
-
-
-
-  }
-
 }

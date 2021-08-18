@@ -1,16 +1,19 @@
 package ru.stqa.dmiv.addressbook.tests;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.thoughtworks.xstream.XStream;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import ru.stqa.dmiv.addressbook.model.GroupData;
 import ru.stqa.dmiv.addressbook.model.Groups;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,57 +23,67 @@ public class GroupCreationTests extends TestBase {
   @DataProvider
   public Iterator<Object[]> validGroupsFromJson() throws IOException {
     List<GroupData> groups = new ArrayList<>();
-    System.out.println(this.getClass().getName());
-    System.out.println(this.getClass().getResource("/groups.json"));
-    InputStreamReader r = new InputStreamReader(this.getClass().getResourceAsStream("/groups.json"));
-    BufferedReader reader = new BufferedReader(r);
-
     Gson gson = new Gson();
-    if (reader.ready()) {
-//    gson.fromJson(reader, GroupData.class);
-      groups = gson.fromJson(reader, groups.getClass());
+    try (InputStreamReader r = new InputStreamReader(this.getClass().getResourceAsStream("/groups.json"));
+         BufferedReader reader = new BufferedReader(r)) {
+      if (reader.ready()) {
+//        groups = gson.fromJson(reader, groups.getClass());
+        groups = gson.fromJson(reader, new TypeToken<List<GroupData>>() {
+        }.getType());
+      }
     }
-    reader.close();
-    return groups.stream().map(g -> new Object[]{g}).collect(Collectors.toList()).iterator();
+    System.out.println(groups);
+
+    return groups.stream().map(g -> new Object[]{g}).iterator();
+  }
+
+  @Test(dataProvider = "validGroupsFromJson")
+  public void testGroupCreationFromJson(GroupData newGroup) {
+    app.goTo().groupPage();
+    Groups before = app.group().all();
+    app.group().create(newGroup);
+    Groups after = app.group().all();
+    assertThat(after, equalTo(before.withAdded(newGroup.withId(after.stream().mapToInt(g -> g.getId()).max().getAsInt()))));
+  }
+
+  @DataProvider
+  public Iterator<Object[]> validGroupsFromXml() throws IOException {
+    List<GroupData> groups = new ArrayList<>();
+    XStream xStream = new XStream();
+    xStream.processAnnotations(GroupData.class);
+    try (InputStreamReader r = new InputStreamReader(this.getClass().getResourceAsStream("/groups.xml"));
+         BufferedReader reader = new BufferedReader(r)) {
+      if (reader.ready()) {
+        groups = (List<GroupData>) xStream.fromXML(reader, groups.getClass());
+      }
+    }
+    return groups.stream().map(g -> new Object[]{g}).iterator();
+  }
+
+  @Test(dataProvider = "validGroupsFromXml")
+  public void testGroupCreationFromXml(GroupData newGroup) {
+    app.goTo().groupPage();
+    Groups before = app.group().all();
+    app.group().create(newGroup);
+    Groups after = app.group().all();
+    assertThat(after, equalTo(before.withAdded(newGroup.withId(after.stream().mapToInt(g -> g.getId()).max().getAsInt()))));
   }
 
   @DataProvider
   public Iterator<Object[]> validGroupsFromCsv() throws IOException {
     List<GroupData> groups = new ArrayList<>();
-//    System.out.println(this.getClass().getName());
-//    System.out.println(this.getClass().getResource("/groups.csv"));
-    InputStreamReader r = new InputStreamReader(this.getClass().getResourceAsStream("/groups.csv"));
-    BufferedReader reader = new BufferedReader(r);
 
-    while (reader.ready()) {
-      String[] g = reader.readLine().split(";");
-      groups.add(new GroupData().withName(g[0]).withHeader(g[1]).withFooter(g[2]));
+    try (InputStreamReader r = new InputStreamReader(this.getClass().getResourceAsStream("/groups.csv"));
+         BufferedReader reader = new BufferedReader(r)) {
+      while (reader.ready()) {
+        String[] g = reader.readLine().split(";");
+        groups.add(new GroupData().withName(g[0]).withHeader(g[1]).withFooter(g[2]));
+      }
     }
-    reader.close();
-    return groups.stream().map(g -> new Object[]{g}).collect(Collectors.toList()).iterator();
-
+    return groups.stream().map(g -> new Object[]{g}).iterator();
   }
 
-  @Test
-  public void myTest() throws IOException {
-    List<GroupData> groups = new ArrayList<>();
-    System.out.println(this.getClass().getName());
-    System.out.println(this.getClass().getResource("/groups.json"));
-    InputStreamReader r = new InputStreamReader(this.getClass().getResourceAsStream("/groups.json"));
-    BufferedReader reader = new BufferedReader(r);
-
-    Gson gson = new Gson();
-    if (reader.ready()) {
-//    gson.fromJson(reader, GroupData.class);
-      groups = gson.fromJson(reader, groups.getClass());
-    }
-    groups.stream().map(g -> new Object[]{g}).collect(Collectors.toList()).iterator();
-
-    System.out.println(groups);
-  }
-
-
-  @Test (dataProvider = "validGroupsFromCsv")
+  @Test(dataProvider = "validGroupsFromCsv")
   public void testGroupCreationFromCsv(GroupData newGroup) {
     app.goTo().groupPage();
     Groups before = app.group().all();
