@@ -26,4 +26,13 @@
     <email>my_mail2@ngs.ru</email>
     <email3>work_mail2@ngs.ru</email3>
   </contact>
+  <contact>
+    <firstname>firstname 3</firstname>
+    <lastname>lastname 3</lastname>
+    <address>address 3</address>
+    <homePhone>555-4443</homePhone>
+    <workPhone>+7(999)11-223</workPhone>
+    <email>my_mail3@ngs.ru</email>
+    <email3>work_mail3@ngs.ru</email3>
+  </contact>
 </list>

@@ -25,5 +25,14 @@
     "workPhone": "+7(999)11-222",
     "email": "my_mail2@ngs.ru",
     "email3": "work_mail2@ngs.ru"
+  },
+  {
+    "firstname": "firstname 3",
+    "lastname": "lastname 3",
+    "address": "address 3",
+    "homePhone": "555-4443",
+    "workPhone": "+7(999)11-223",
+    "email": "my_mail3@ngs.ru",
+    "email3": "work_mail3@ngs.ru"
   }
 ]
