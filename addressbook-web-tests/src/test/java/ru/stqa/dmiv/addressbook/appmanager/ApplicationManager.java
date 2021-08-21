@@ -6,6 +6,10 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.BrowserType;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 public class ApplicationManager {
@@ -15,12 +19,16 @@ public class ApplicationManager {
   private SessionHelper sessionHelper;
   protected WebDriver wd;
   private String browser;
+  Properties localProperties;
 
   public ApplicationManager(String browser) {
     this.browser = browser;
   }
 
-  public void init() {
+  public void init(){
+
+//    localProperties = new Properties(new FileReader(new File(String.format("/src/test/resources/", System.getProperties().getProperty("target")))));
+
     if (browser.equals(BrowserType.FIREFOX)) {
       wd = new FirefoxDriver();
     } else if (browser.equals(BrowserType.CHROME)) {
@@ -41,7 +49,6 @@ public class ApplicationManager {
   public void stop() {
     wd.quit();
   }
-
 
 
   public GroupHelper group() {
