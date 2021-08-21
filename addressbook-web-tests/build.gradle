@@ -2,11 +2,11 @@ import org.gradle.api.tasks.testing.Test
 
 apply plugin: 'java'
 
-repositories{
+repositories {
     mavenCentral()
 }
 
-dependencies{
+dependencies {
     compile 'org.testng:testng:7.4.0'
     compile 'org.seleniumhq.selenium:selenium-java:3.141.59'
     compile 'org.hamcrest:java-hamcrest:2.0.0.0'
@@ -15,14 +15,26 @@ dependencies{
     implementation 'com.google.code.gson:gson:2.8.7'
 }
 
-task testGroups(type: Test){
-    useTestNG{
+task testGroups(type: Test) {
+    useTestNG {
         suites 'src/test/resources/testng-groups.xml'
+    }
+    if (projects.hasProperty('browser')) {
+        systemProperty 'browser', "${browser}"
+    }
+    if (projects.hasProperty('target')) {
+        systemProperty 'target', "${target}"
     }
 }
 
-task testContacts(type: Test){
-    useTestNG{
+task testContacts(type: Test) {
+    useTestNG {
         suites 'src/test/resources/testng-contacts.xml'
+    }
+    if (projects.hasProperty('browser')) {
+        systemProperty 'browser', "${browser}"
+    }
+    if (projects.hasProperty('target')) {
+        systemProperty 'target', "${target}"
     }
 }
