@@ -32,6 +32,7 @@
     <orderEntry type="library" name="Gradle: com.thoughtworks.xstream:xstream:1.4.17" level="project" />
     <orderEntry type="library" name="Gradle: com.google.code.gson:gson:2.8.7" level="project" />
     <orderEntry type="library" name="Gradle: ch.qos.logback:logback-classic:1.2.5" level="project" />
+    <orderEntry type="library" name="Gradle: mysql:mysql-connector-java:8.0.26" level="project" />
     <orderEntry type="library" name="Gradle: org.webjars:jquery:3.5.1" level="project" />
     <orderEntry type="library" name="Gradle: org.seleniumhq.selenium:selenium-http:4.0.0-beta-4" level="project" />
     <orderEntry type="library" name="Gradle: org.seleniumhq.selenium:selenium-json:4.0.0-beta-4" level="project" />
@@ -41,6 +42,7 @@
     <orderEntry type="library" name="Gradle: org.asynchttpclient:async-http-client:2.12.3" level="project" />
     <orderEntry type="library" name="Gradle: org.asynchttpclient:async-http-client-netty-utils:2.12.3" level="project" />
     <orderEntry type="library" name="Gradle: org.slf4j:slf4j-api:1.7.31" level="project" />
+    <orderEntry type="library" name="Gradle: com.google.protobuf:protobuf-java:3.11.4" level="project" />
     <orderEntry type="library" name="Gradle: com.google.auto.service:auto-service:1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.auto.service:auto-service-annotations:1.0" level="project" />
     <orderEntry type="library" name="Gradle: com.google.auto:auto-common:1.0" level="project" />
