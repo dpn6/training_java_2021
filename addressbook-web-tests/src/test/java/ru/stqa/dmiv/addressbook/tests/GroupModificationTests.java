@@ -14,21 +14,25 @@ public class GroupModificationTests extends TestBase {
 
   @BeforeMethod
   void precondition() {
+
     app.goTo().groupPage();
-    if (app.group().all().size() == 0) {
+//    if (app.group().all().size() == 0) {
+    if(app.db().groups().size() == 0){
       app.group().create(new GroupData().withName("test1").withHeader("test2"));
     }
   }
 
   @Test
   public void testGroupModification() {
-    Groups before = app.group().all();
+//    Groups before = app.group().all();
+    Groups before = app.db().groups();
     GroupData modifiedGroup = before.iterator().next();
     GroupData afterModifyGroup = new GroupData().withId(modifiedGroup.getId()).withName("name_group").withHeader("header_group").withFooter("footer_group");
     app.group().modify(afterModifyGroup);
     before.remove(modifiedGroup);
     before.add(afterModifyGroup);
-    Groups after = app.group().all();
+//    Groups after = app.group().all();
+    Groups after = app.db().groups();
     MatcherAssert.assertThat(after, CoreMatchers.equalTo(before.without(modifiedGroup).withAdded(afterModifyGroup)));
   }
 

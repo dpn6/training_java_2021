@@ -21,6 +21,8 @@ public class ApplicationManager {
   private String browser;
   private final Properties properties;
 
+  private DbHelper dbHelper;
+
   public ApplicationManager(String browser) {
     this.browser = browser;
     properties = new Properties();
@@ -29,6 +31,8 @@ public class ApplicationManager {
   public void init() throws IOException {
     String target = System.getProperty("target", "local");
     properties.load(new FileReader(new File(String.format("src/test/resources/%s.properties", target))));
+
+    dbHelper = new DbHelper();
 
     if (browser.equals(BrowserType.FIREFOX)) {
       wd = new FirefoxDriver();
@@ -39,14 +43,13 @@ public class ApplicationManager {
     }
     wd.manage().timeouts().implicitlyWait(0, TimeUnit.SECONDS);
 //    wd.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-//    wd.get("https://localhost/addressbook/");
     wd.get(properties.getProperty("web.baseUrl"));
     groupHelper = new GroupHelper(wd);
     contactHelper = new ContactHelper(wd);
     navigationHelper = new NavigationHelper(wd);
     sessionHelper = new SessionHelper(wd);
-//    sessionHelper.login("admin", "secret");
     sessionHelper.login(properties.getProperty("web.adminLogin"), properties.getProperty("web.adminPassword"));
+
   }
 
   public void stop() {
@@ -65,4 +68,9 @@ public class ApplicationManager {
   public ContactHelper contact() {
     return contactHelper;
   }
+
+  public DbHelper db() {
+    return dbHelper;
+  }
+
 }

@@ -12,7 +12,7 @@ import ru.stqa.dmiv.addressbook.model.GroupData;
 
 import java.util.List;
 
-public class HbconnectionTests {
+public class HbCconnectionTests {
 
   private SessionFactory sessionFactory;
 
