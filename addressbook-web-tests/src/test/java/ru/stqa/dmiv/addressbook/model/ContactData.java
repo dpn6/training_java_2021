@@ -1,41 +1,67 @@
 package ru.stqa.dmiv.addressbook.model;
 
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 import com.thoughtworks.xstream.annotations.XStreamAlias;
 import com.thoughtworks.xstream.annotations.XStreamOmitField;
+import org.hibernate.annotations.Type;
 
+import javax.persistence.*;
 import java.io.File;
 import java.util.Objects;
 
 @XStreamAlias("contact")
+@Entity
+@Table(name = "addressbook")
 public class ContactData {
   @XStreamOmitField
+  @Id
   private int id = Integer.MAX_VALUE;
   @Expose
   private String firstname;
   @Expose
   private String lastname;
+
+  @Transient
+  private String group;
+
   @Expose
+  @Type(type = "text")
   private String address;
+
   @Expose
+  @Column(name = "home")
+  @Type(type = "text")
   private String homePhone;
 
+//  @Column(name = "mobile")
+@Type(type = "text")
   private String mobile;
+
   @Expose
+  @Column(name = "work")
+  @Type(type = "text")
   private String workPhone;
 
+  @Transient
   private String allPhones;
+
   @Expose
+  @Type(type = "text")
   private String email;
 
+  @Type(type = "text")
   private String email2;
+
   @Expose
+  @Type(type = "text")
   private String email3;
 
+  @Transient
   private String allEmails;
 
-  private File photo;
+  @Column(name = "photo")
+  @Type(type = "text")
+  private String photo;
 
 
   @Override
@@ -45,8 +71,13 @@ public class ContactData {
             ", firstname='" + firstname + '\'' +
             ", lastname='" + lastname + '\'' +
             ", address='" + address + '\'' +
+            ", homePhone='" + homePhone + '\'' +
             ", mobile='" + mobile + '\'' +
+            ", workPhone='" + workPhone + '\'' +
             ", email='" + email + '\'' +
+            ", email2='" + email2 + '\'' +
+            ", email3='" + email3 + '\'' +
+            ", photo='" + photo + '\'' +
             '}';
   }
 
@@ -62,6 +93,11 @@ public class ContactData {
 
   public ContactData withLastname(String lastname) {
     this.lastname = lastname;
+    return this;
+  }
+
+  public ContactData withGroup(String group) {
+    this.group = group;
     return this;
   }
 
@@ -111,7 +147,7 @@ public class ContactData {
   }
 
   public ContactData withPhoto(File photo) {
-    this.photo = photo;
+    this.photo = photo.getPath();
     return this;
   }
 
@@ -167,7 +203,11 @@ public class ContactData {
   }
 
   public File getPhoto() {
-    return photo;
+    return new File(photo);
+  }
+
+  public String getGroup() {
+    return group;
   }
 
 
