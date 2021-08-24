@@ -3,6 +3,8 @@ package ru.stqa.dmiv.addressbook.tests;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.thoughtworks.xstream.XStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import ru.stqa.dmiv.addressbook.model.GroupData;
@@ -19,6 +21,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 public class GroupCreationTests extends TestBase {
+  Logger logger = LoggerFactory.getLogger(GroupCreationTests.class);
 
   @DataProvider
   public Iterator<Object[]> validGroupsFromJson() throws IOException {
@@ -32,17 +35,19 @@ public class GroupCreationTests extends TestBase {
         }.getType());
       }
     }
-    System.out.println(groups);
-
+//    logger.info("Из файла загружены группы: " + groups);
+    logger.info(String.format("Из файла загружены группы: %s для добавления", groups));
     return groups.stream().map(g -> new Object[]{g}).iterator();
   }
 
   @Test(dataProvider = "validGroupsFromJson")
   public void testGroupCreationFromJson(GroupData newGroup) {
     app.goTo().groupPage();
-    Groups before = app.group().all();
+//    Groups before = app.group().all();
+    Groups before = app.db().groups();
     app.group().create(newGroup);
-    Groups after = app.group().all();
+//    Groups after = app.group().all();
+    Groups after = app.db().groups();
     assertThat(after, equalTo(before.withAdded(newGroup.withId(after.stream().mapToInt(g -> g.getId()).max().getAsInt()))));
   }
 
@@ -57,15 +62,18 @@ public class GroupCreationTests extends TestBase {
         groups = (List<GroupData>) xStream.fromXML(reader, groups.getClass());
       }
     }
+    logger.info(String.format("Из файла groups.xml загружены группы: %s для добавления", groups));
     return groups.stream().map(g -> new Object[]{g}).iterator();
   }
 
   @Test(dataProvider = "validGroupsFromXml")
   public void testGroupCreationFromXml(GroupData newGroup) {
     app.goTo().groupPage();
-    Groups before = app.group().all();
+//    Groups before = app.group().all();
+    Groups before = app.db().groups();
     app.group().create(newGroup);
-    Groups after = app.group().all();
+//    Groups after = app.group().all();
+    Groups after = app.db().groups();
     assertThat(after, equalTo(before.withAdded(newGroup.withId(after.stream().mapToInt(g -> g.getId()).max().getAsInt()))));
   }
 
@@ -80,25 +88,30 @@ public class GroupCreationTests extends TestBase {
         groups.add(new GroupData().withName(g[0]).withHeader(g[1]).withFooter(g[2]));
       }
     }
+    logger.info(String.format("Из файла groups.csv загружены группы: %s для добавления", groups));
     return groups.stream().map(g -> new Object[]{g}).iterator();
   }
 
   @Test(dataProvider = "validGroupsFromCsv")
   public void testGroupCreationFromCsv(GroupData newGroup) {
     app.goTo().groupPage();
-    Groups before = app.group().all();
+//    Groups before = app.group().all();
+    Groups before = app.db().groups();
     app.group().create(newGroup);
-    Groups after = app.group().all();
+//    Groups after = app.group().all();
+    Groups after = app.db().groups();
     assertThat(after, equalTo(before.withAdded(newGroup.withId(after.stream().mapToInt(g -> g.getId()).max().getAsInt()))));
   }
 
   @Test
   public void testGroupCreation() {
     app.goTo().groupPage();
-    Groups before = app.group().all();
+    //    Groups before = app.group().all();
+    Groups before = app.db().groups();
     GroupData newGroup = new GroupData().withName("test1").withHeader("test2").withFooter("test3");
     app.group().create(newGroup);
-    Groups after = app.group().all();
+    //    Groups after = app.group().all();
+    Groups after = app.db().groups();
     assertThat(after, equalTo(before.withAdded(newGroup.withId(after.stream().mapToInt(g -> g.getId()).max().getAsInt()))));
   }
 }
