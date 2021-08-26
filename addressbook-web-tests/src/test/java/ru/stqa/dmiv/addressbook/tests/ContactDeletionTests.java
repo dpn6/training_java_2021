@@ -21,12 +21,15 @@ public class ContactDeletionTests extends TestBase {
   @Test
   public void testContactDeletionTests() {
 //      Contacts before = app.contact().all();
-    Contacts before = app.db().contacts();
-    ContactData deletedContact = before.iterator().next();
-    app.contact().delete(deletedContact);
-    app.goTo().contactPage();
+    for(int i=0; i <1; i++) {
+      Contacts before = app.db().contacts();
+      ContactData deletedContact = before.iterator().next();
+      app.contact().delete(deletedContact);
+      app.goTo().contactPage();
 //      Contacts after = app.contact().all();
-    Contacts after = app.db().contacts();
-    MatcherAssert.assertThat(after, CoreMatchers.equalTo(before.without(deletedContact)));
+      Contacts after = app.db().contacts();
+      MatcherAssert.assertThat(after, CoreMatchers.equalTo(before.without(deletedContact)));
+      verifyGroupListInUi();
+    }
   }
 }

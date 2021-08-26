@@ -26,16 +26,14 @@ public class ContactCreationTests extends TestBase {
   @Test
   public void testContactCreation() {
     app.goTo().contactPage();
-//    Contacts before = app.contact().all();
     Contacts before = app.db().contacts();
     ContactData newContact = new ContactData().withLastname("test1").withFirstname("test2").withAddress("test3")
             .withMobile("222").withEmail("polina@mail.ru").withPhoto(new File("./src/test/resources/Small2.png"));
     app.contact().create(newContact);
-//    Contacts after = app.contact().all();
     Contacts after = app.db().contacts();
-    before.add(newContact.withId(after.stream().mapToInt(c -> c.getId()).max().getAsInt()));
     assertThat(after, equalTo(before.
             withAdded(newContact.withId(after.stream().mapToInt(c -> c.getId()).max().getAsInt()))));
+    verifyGroupListInUi();
   }
 
   @DataProvider

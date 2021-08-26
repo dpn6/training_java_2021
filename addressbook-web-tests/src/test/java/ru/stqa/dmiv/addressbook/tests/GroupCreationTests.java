@@ -43,12 +43,11 @@ public class GroupCreationTests extends TestBase {
   @Test(dataProvider = "validGroupsFromJson")
   public void testGroupCreationFromJson(GroupData newGroup) {
     app.goTo().groupPage();
-//    Groups before = app.group().all();
     Groups before = app.db().groups();
     app.group().create(newGroup);
-//    Groups after = app.group().all();
     Groups after = app.db().groups();
     assertThat(after, equalTo(before.withAdded(newGroup.withId(after.stream().mapToInt(g -> g.getId()).max().getAsInt()))));
+    verifyGroupListInUi();
   }
 
   @DataProvider
@@ -69,12 +68,11 @@ public class GroupCreationTests extends TestBase {
   @Test(dataProvider = "validGroupsFromXml")
   public void testGroupCreationFromXml(GroupData newGroup) {
     app.goTo().groupPage();
-//    Groups before = app.group().all();
     Groups before = app.db().groups();
     app.group().create(newGroup);
-//    Groups after = app.group().all();
     Groups after = app.db().groups();
     assertThat(after, equalTo(before.withAdded(newGroup.withId(after.stream().mapToInt(g -> g.getId()).max().getAsInt()))));
+    verifyGroupListInUi();
   }
 
   @DataProvider
@@ -95,23 +93,21 @@ public class GroupCreationTests extends TestBase {
   @Test(dataProvider = "validGroupsFromCsv")
   public void testGroupCreationFromCsv(GroupData newGroup) {
     app.goTo().groupPage();
-//    Groups before = app.group().all();
     Groups before = app.db().groups();
     app.group().create(newGroup);
-//    Groups after = app.group().all();
     Groups after = app.db().groups();
     assertThat(after, equalTo(before.withAdded(newGroup.withId(after.stream().mapToInt(g -> g.getId()).max().getAsInt()))));
+    verifyGroupListInUi();
   }
 
   @Test
   public void testGroupCreation() {
     app.goTo().groupPage();
-    //    Groups before = app.group().all();
     Groups before = app.db().groups();
     GroupData newGroup = new GroupData().withName("test1").withHeader("test2").withFooter("test3");
     app.group().create(newGroup);
-    //    Groups after = app.group().all();
     Groups after = app.db().groups();
     assertThat(after, equalTo(before.withAdded(newGroup.withId(after.stream().mapToInt(g -> g.getId()).max().getAsInt()))));
+    verifyGroupListInUi();
   }
 }
