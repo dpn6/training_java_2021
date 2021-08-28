@@ -2,6 +2,7 @@ package ru.stqa.dmiv.addressbook.appmanager;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.BrowserType;
@@ -37,7 +38,9 @@ public class ApplicationManager {
     if (browser.equals(BrowserType.FIREFOX)) {
       wd = new FirefoxDriver();
     } else if (browser.equals(BrowserType.CHROME)) {
-      wd = new ChromeDriver();
+      ChromeOptions option = new ChromeOptions();
+      option.addArguments("--ignore-certificate-errors");
+      wd = new ChromeDriver(option);
     } else if (browser.equals(BrowserType.IE)) {
       wd = new InternetExplorerDriver();
     }

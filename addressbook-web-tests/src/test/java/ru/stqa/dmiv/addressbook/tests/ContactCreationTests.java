@@ -5,16 +5,20 @@ import com.google.gson.reflect.TypeToken;
 import com.thoughtworks.xstream.XStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import ru.stqa.dmiv.addressbook.model.ContactData;
 import ru.stqa.dmiv.addressbook.model.Contacts;
+import ru.stqa.dmiv.addressbook.model.GroupData;
+import ru.stqa.dmiv.addressbook.model.Groups;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,12 +27,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class ContactCreationTests extends TestBase {
 
+  @BeforeTest
+  public void precondition() {
+    if (app.db().groups().size() == 0) {
+      app.group().create(new GroupData().withName(String.format("gr_name_%s", new Date().getTime())));
+    }
+  }
+
   @Test
   public void testContactCreation() {
     app.goTo().contactPage();
     Contacts before = app.db().contacts();
-    ContactData newContact = new ContactData().withLastname("test1").withFirstname("test2").withAddress("test3")
-            .withMobile("222").withEmail("polina@mail.ru").withPhoto(new File("./src/test/resources/Small2.png"));
+    ContactData newContact = new ContactData().withLastname(String.format("lastName_%s", new Date().getTime())).withFirstname("test2").withAddress("test3")
+            .withMobile("222").withEmail("polina@mail.ru").withPhoto(new File("./src/test/resources/Small2.png"))
+            .inGroup(app.db().groups().iterator().next());
     app.contact().create(newContact);
     Contacts after = app.db().contacts();
     assertThat(after, equalTo(before.

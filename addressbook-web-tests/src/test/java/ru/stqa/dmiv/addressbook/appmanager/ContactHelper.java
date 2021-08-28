@@ -3,6 +3,8 @@ package ru.stqa.dmiv.addressbook.appmanager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.Select;
+import org.testng.Assert;
 import ru.stqa.dmiv.addressbook.model.ContactData;
 import ru.stqa.dmiv.addressbook.model.Contacts;
 
@@ -22,10 +24,17 @@ public class ContactHelper extends HelperBase {
     click(By.linkText("home page"));
   }
 
-  public void fillContactForm(ContactData contactData) {
+  public void fillContactForm(ContactData contactData, boolean isCreate) {
     type(By.name("firstname"), contactData.getFirstname());
     type(By.name("lastname"), contactData.getLastname());
 //    attach(By.name("photo"), contactData.getPhoto());
+    if (isCreate) {
+      if (contactData.getGroups().size() > 0) {
+        Assert.assertTrue(contactData.getGroups().size() == 1);
+        Select dropdown = new Select(wd.findElement(By.name("new_group")));
+        dropdown.selectByVisibleText(contactData.getGroups().iterator().next().getName());
+      }
+    }
     type(By.name("address"), contactData.getAddress());
     type(By.name("home"), contactData.getHomePhone());
     type(By.name("mobile"), contactData.getMobile());
@@ -69,7 +78,7 @@ public class ContactHelper extends HelperBase {
 
   public void create(ContactData contactData) {
     initContactCreation();
-    fillContactForm(contactData);
+    fillContactForm(contactData, true);
     submitContactCreation();
     returnHomePage();
   }
@@ -80,7 +89,7 @@ public class ContactHelper extends HelperBase {
 
   public void modify(ContactData contact) {
     initContactModification(contact.getId());
-    fillContactForm(contact);
+    fillContactForm(contact, false);
     submitContactModification();
     returnHomePage();
   }

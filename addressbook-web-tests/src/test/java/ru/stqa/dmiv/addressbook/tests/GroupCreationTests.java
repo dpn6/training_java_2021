@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -104,7 +105,7 @@ public class GroupCreationTests extends TestBase {
   public void testGroupCreation() {
     app.goTo().groupPage();
     Groups before = app.db().groups();
-    GroupData newGroup = new GroupData().withName("test1").withHeader("test2").withFooter("test3");
+    GroupData newGroup = new GroupData().withName(String.format("name_group_%s", new Date().getTime())).withHeader("test2").withFooter("test3");
     app.group().create(newGroup);
     Groups after = app.db().groups();
     assertThat(after, equalTo(before.withAdded(newGroup.withId(after.stream().mapToInt(g -> g.getId()).max().getAsInt()))));
