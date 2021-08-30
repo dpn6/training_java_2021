@@ -1,5 +1,7 @@
 package ru.stqa.dmiv.addressbook.appmanager;
 
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -7,6 +9,8 @@ import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import ru.stqa.dmiv.addressbook.model.ContactData;
 import ru.stqa.dmiv.addressbook.model.Contacts;
+import ru.stqa.dmiv.addressbook.model.GroupData;
+import ru.stqa.dmiv.addressbook.model.Groups;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -151,5 +155,37 @@ public class ContactHelper extends HelperBase {
 
     wd.navigate().back();
     return info;
+  }
+
+  public void includeInGroup(ContactData contact) {
+    initContactIncludingInGroup(contact);
+    selectGroup(contact);
+    submitContactIncludingInGroup(contact);
+  }
+
+  private void submitContactIncludingInGroup(ContactData contact) {
+    click(By.name("add"));
+  }
+
+  private void selectGroup(ContactData contact) {
+      if (contact.getGroups().size() > 0) {
+        //достаем информацию об изменяемом контакте из бд
+        DbHelper db = new DbHelper();
+        Groups groupsInDb = db.contacts().stream().filter(c -> c.getId() == contact.getId()).map(c -> c.getGroups()).collect(Collectors.toList()).get(0);
+        while (groupsInDb.iterator().hasNext()) {
+          if (groupsInDb.contains(contact.getGroups().iterator().next())) {
+            //надо удалить контакт из группы
+          } else {
+            //надо добавить контакт в группу
+            Select dropdown = new Select(wd.findElement(By.name("to_group")));
+            dropdown.selectByVisibleText(contact.getGroups().iterator().next().getName());
+            break;
+          }
+        }
+      }
+  }
+
+  private void initContactIncludingInGroup(ContactData contact) {
+    click(By.cssSelector(String.format("input[type = 'checkbox'][id = '%s']", contact.getId())));
   }
 }

@@ -18,11 +18,11 @@ public class ApplicationManager {
   private NavigationHelper navigationHelper;
   private GroupHelper groupHelper;
   private SessionHelper sessionHelper;
+  private DbHelper dbHelper;
+
   protected WebDriver wd;
   private String browser;
   private final Properties properties;
-
-  private DbHelper dbHelper;
 
   public ApplicationManager(String browser) {
     this.browser = browser;
