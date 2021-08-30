@@ -51,7 +51,8 @@ public class ContactIncludeInGroupTests extends TestBase {
         break;
       }
     }
-    assertThat(beforeGroupsUseContact, equalTo(app.db().contacts().stream()
+    Groups afterGroupsUseContact = contact.getGroups();
+    assertThat(afterGroupsUseContact, equalTo(app.db().contacts().stream()
             .filter(c -> c.getId() == contact.getId()).map(c -> c.getGroups()).collect(Collectors.toList()).get(0)));
 
   }
