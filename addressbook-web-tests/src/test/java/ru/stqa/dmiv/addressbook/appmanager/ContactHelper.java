@@ -168,21 +168,19 @@ public class ContactHelper extends HelperBase {
   }
 
   private void selectGroup(ContactData contact) {
-      if (contact.getGroups().size() > 0) {
-        //достаем информацию об изменяемом контакте из бд
-        DbHelper db = new DbHelper();
-        Groups groupsInDb = db.contacts().stream().filter(c -> c.getId() == contact.getId()).map(c -> c.getGroups()).collect(Collectors.toList()).get(0);
-        while (groupsInDb.iterator().hasNext()) {
-          if (groupsInDb.contains(contact.getGroups().iterator().next())) {
-            //надо удалить контакт из группы
-          } else {
-            //надо добавить контакт в группу
-            Select dropdown = new Select(wd.findElement(By.name("to_group")));
-            dropdown.selectByVisibleText(contact.getGroups().iterator().next().getName());
-            break;
-          }
+    if (contact.getGroups().size() > 0) {
+      //достаем информацию об изменяемом контакте из бд
+      DbHelper db = new DbHelper();
+      Groups groupsInDb = db.contacts().stream().filter(c -> c.getId() == contact.getId()).map(c -> c.getGroups()).collect(Collectors.toList()).get(0);
+      while (groupsInDb.iterator().hasNext()) {
+        if ( !groupsInDb.contains(contact.getGroups().iterator().next())) {
+          //надо добавить контакт в группу
+          Select dropdown = new Select(wd.findElement(By.name("to_group")));
+          dropdown.selectByVisibleText(contact.getGroups().iterator().next().getName());
+          break;
         }
       }
+    }
   }
 
   private void initContactIncludingInGroup(ContactData contact) {
