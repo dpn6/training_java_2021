@@ -17,8 +17,8 @@ import static org.hamcrest.MatcherAssert.*;
 
 public class ContactIncludeInGroupTests extends TestBase {
 
-//  @BeforeMethod
-@BeforeTest
+  //  @BeforeMethod
+  @BeforeTest
   public void precondition() {
     if (app.db().groups().size() == 0) {
       app.goTo().groupPage();
@@ -36,24 +36,30 @@ public class ContactIncludeInGroupTests extends TestBase {
     Groups groups = app.db().groups();
     ContactData contact = before.iterator().next();
     Groups beforeGroupsUseContact = contact.getGroups();
+
+    //проверяем, а есть ли группа, в которую можно добавить контакт
+    //если нет, то создаем группу и обновляем списко групп
     if (beforeGroupsUseContact.size() == groups.size()) {
       app.goTo().groupPage();
       app.group().create(new GroupData().withName(String.format("gr_name_%s", new Date().getTime())));
+      groups = app.db().groups();
       app.goTo().contactPage();
     }
-
     //пробегаемся по всем группам и выбираем ту, в которую не входит контакт
+    GroupData groupAdded = null;
     while (groups.iterator().hasNext()) {
-      GroupData groupData = groups.iterator().next();
-      if (!beforeGroupsUseContact.contains(groupData)) {
-        contact.inGroup(groupData);
+      groupAdded = groups.iterator().next();
+      if (!beforeGroupsUseContact.contains(groupAdded)) {
+        contact.inGroup(groupAdded);
         app.contact().includeInGroup(contact);
         break;
       }
     }
-    Groups afterGroupsUseContact = contact.getGroups();
-    assertThat(afterGroupsUseContact, equalTo(app.db().contacts().stream()
-            .filter(c -> c.getId() == contact.getId()).map(c -> c.getGroups()).collect(Collectors.toList()).get(0)));
+
+    Groups afterGroupsUseContact = app.db().contacts().stream()
+            .filter(c -> c.getId() == contact.getId()).map(c -> c.getGroups()).collect(Collectors.toList()).get(0);
+
+    assertThat(afterGroupsUseContact, equalTo(beforeGroupsUseContact.withAdded(groupAdded)));
 
   }
 }
