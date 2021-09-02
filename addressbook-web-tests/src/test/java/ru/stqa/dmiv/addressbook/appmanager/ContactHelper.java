@@ -173,7 +173,7 @@ public class ContactHelper extends HelperBase {
       DbHelper db = new DbHelper();
       Groups groupsInDb = db.contacts().stream().filter(c -> c.getId() == contact.getId()).map(c -> c.getGroups()).collect(Collectors.toList()).get(0);
       while (groupsInDb.iterator().hasNext()) {
-        if ( !groupsInDb.contains(contact.getGroups().iterator().next())) {
+        if (!groupsInDb.contains(contact.getGroups().iterator().next())) {
           //надо добавить контакт в группу
           Select dropdown = new Select(wd.findElement(By.name("to_group")));
           dropdown.selectByVisibleText(contact.getGroups().iterator().next().getName());
@@ -185,5 +185,23 @@ public class ContactHelper extends HelperBase {
 
   private void initContactIncludingInGroup(ContactData contact) {
     click(By.cssSelector(String.format("input[type = 'checkbox'][id = '%s']", contact.getId())));
+  }
+
+  public GroupData deleteFromGroup(ContactData contact) {
+    GroupData group = selectGroupRemoving(contact);
+    initContactIncludingInGroup(contact);
+    submitContactRemovingFromGroup(contact);
+    return group;
+  }
+
+  private void submitContactRemovingFromGroup(ContactData contact) {
+    click(By.name("remove"));
+  }
+
+  private GroupData selectGroupRemoving(ContactData contact) {
+    GroupData group = contact.getGroups().iterator().next();
+    Select dropdown = new Select(wd.findElement(By.name("group")));
+    dropdown.selectByVisibleText(group.getName());
+    return group;
   }
 }
