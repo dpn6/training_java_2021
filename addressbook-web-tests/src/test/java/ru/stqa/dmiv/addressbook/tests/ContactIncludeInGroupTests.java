@@ -57,7 +57,7 @@ public class ContactIncludeInGroupTests extends TestBase {
     }
 
     Groups afterGroupsUseContact = app.db().contacts().stream()
-            .filter(c -> c.getId() == contact.getId()).map(c -> c.getGroups()).collect(Collectors.toList()).get(0);
+            .filter(c -> c.getId() == contact.getId()).collect(Collectors.toList()).get(0).getGroups();
 
     assertThat(afterGroupsUseContact, equalTo(beforeGroupsUseContact.withAdded(groupAdded)));
 
