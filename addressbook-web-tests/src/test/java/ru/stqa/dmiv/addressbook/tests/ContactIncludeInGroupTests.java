@@ -10,6 +10,7 @@ import ru.stqa.dmiv.addressbook.model.GroupData;
 import ru.stqa.dmiv.addressbook.model.Groups;
 
 import java.util.Date;
+import java.util.Iterator;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.*;
@@ -46,12 +47,26 @@ public class ContactIncludeInGroupTests extends TestBase {
       app.goTo().contactPage();
     }
     //пробегаемся по всем группам и выбираем ту, в которую не входит контакт
+    //так неправильно работать с итератором. Всегда будет найден 1-ый элемент
+//    GroupData groupAdded = null;
+//    while (groups.iterator().hasNext()) {
+//      groupAdded = groups.iterator().next();
+//      if (!beforeGroupsUseContact.contains(groupAdded)) {
+//        contact.inGroup(groupAdded);
+//        app.contact().includeInGroup(contact);
+//        break;
+//      }
+//    }
+
+    //пробегаемся по всем группам и выбираем ту, в которую не входит контакт
+    //вот так верно
     GroupData groupAdded = null;
-    while (groups.iterator().hasNext()) {
-      groupAdded = groups.iterator().next();
+    Iterator<GroupData> groupsIterator = groups.iterator();
+    while (groupsIterator.hasNext()) {
+      groupAdded = groupsIterator.next();
       if (!beforeGroupsUseContact.contains(groupAdded)) {
-        contact.inGroup(groupAdded);
-        app.contact().includeInGroup(contact);
+//        contact.inGroup(groupAdded);
+        app.contact().includeInGroup(contact, groupAdded);
         break;
       }
     }

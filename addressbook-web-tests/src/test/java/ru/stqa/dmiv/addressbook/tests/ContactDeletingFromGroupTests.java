@@ -32,13 +32,23 @@ public class ContactDeletingFromGroupTests extends TestBase {
   void testContactDeletingFromGroup() {
     ContactData contact = app.db().contacts().iterator().next();
     Groups before = contact.getGroups();
+    ContactData contactAfterIncluding = null;
+
     if (contact.getGroups().size() == 0) {
-      app.contact().includeInGroup(contact);
+      app.contact().includeInGroup(contact, app.db().groups().iterator().next());
+      contactAfterIncluding = app.db().contacts().stream().filter(c -> c.getId() == contact.getId()).findAny().get();
     }
-    GroupData group = app.contact().deleteFromGroup(contact);
+    GroupData group = null;
+    if (contactAfterIncluding != null) {
+      //обновляем информацию о группах контакта
+      before = contactAfterIncluding.getGroups();
+      group = app.contact().deleteFromGroup(contactAfterIncluding);
+    } else {
+      group = app.contact().deleteFromGroup(contact);
+    }
     Groups after =
             app.db().contacts().stream().filter(c -> c.getId() == contact.getId()).collect(Collectors.toList()).get(0)
-            .getGroups();
+                    .getGroups();
     assertThat(after.withAdded(group), equalTo(before));
   }
 }

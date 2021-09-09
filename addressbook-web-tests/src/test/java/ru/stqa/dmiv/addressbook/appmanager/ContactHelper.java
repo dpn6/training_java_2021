@@ -28,6 +28,10 @@ public class ContactHelper extends HelperBase {
     click(By.linkText("home page"));
   }
 
+  private void goHome(){
+    click(By.linkText("home"));
+  }
+
   public void fillContactForm(ContactData contactData, boolean isCreate) {
     type(By.name("firstname"), contactData.getFirstname());
     type(By.name("lastname"), contactData.getLastname());
@@ -102,18 +106,23 @@ public class ContactHelper extends HelperBase {
     selectContact(contact.getId());
     deleteSelectedContact();
     closeAlertAccept();
-    waitMessage();
+    waitMessage(500);
   }
 
-  private void waitMessage() {
-    try {
-      while (!isElementPresent(By.cssSelector(".msgbox"))) {
-        System.out.println("Ждемс...");
-        Thread.sleep(10);
+  private void waitMessage(long timeout) {
+    long now = System.currentTimeMillis();
+    while (System.currentTimeMillis() < (now + timeout)) {
+      if (isElementPresent(By.cssSelector(".msgbox"))) {
+        return;
       }
-    } catch (InterruptedException e) {
-      System.out.println("InterruptedException");
+      try {
+        System.out.println("Ждемс...");
+        Thread.sleep(100);
+      } catch (InterruptedException e) {
+        System.out.println("InterruptedException");
+      }
     }
+    System.out.println("Не дождались сообщения :(");
   }
 
   public Contacts all() {
@@ -157,33 +166,45 @@ public class ContactHelper extends HelperBase {
     return info;
   }
 
-  public void includeInGroup(ContactData contact) {
+  public void includeInGroup(ContactData contact, GroupData group) {
     initContactIncludingInGroup(contact);
-    selectGroup(contact);
+    selectGroup(contact, group);
     submitContactIncludingInGroup(contact);
+    waitMessage(500);
+    goHome();
   }
 
   private void submitContactIncludingInGroup(ContactData contact) {
     click(By.name("add"));
   }
 
-  private void selectGroup(ContactData contact) {
-    if (contact.getGroups().size() > 0) {
-      //достаем информацию об изменяемом контакте из бд
-      DbHelper db = new DbHelper();
-      Groups groupsInDb = db.contacts().stream().filter(c -> c.getId() == contact.getId()).map(c -> c.getGroups()).collect(Collectors.toList()).get(0);
-      while (groupsInDb.iterator().hasNext()) {
-        if (!groupsInDb.contains(contact.getGroups().iterator().next())) {
-          //надо добавить контакт в группу
-          Select dropdown = new Select(wd.findElement(By.name("to_group")));
-          dropdown.selectByVisibleText(contact.getGroups().iterator().next().getName());
-          break;
-        }
-      }
-    }
+//  private void selectGroup(ContactData contact) {
+//    if (contact.getGroups().size() > 0) {
+//      //достаем информацию об изменяемом контакте из бд
+//      DbHelper db = new DbHelper();
+//      Groups groupsInDb = db.contacts().stream().filter(c -> c.getId() == contact.getId()).map(c -> c.getGroups()).collect(Collectors.toList()).get(0);
+//      while (groupsInDb.iterator().hasNext()) {
+//        if (!groupsInDb.contains(contact.getGroups().iterator().next())) {
+//          //надо добавить контакт в группу
+//          Select dropdown = new Select(wd.findElement(By.name("to_group")));
+//          dropdown.selectByVisibleText(contact.getGroups().iterator().next().getName());
+//          break;
+//        }
+//      }
+//    }
+//  }
+
+  private void selectGroup(ContactData contact, GroupData group) {
+    Select dropdown = new Select(wd.findElement(By.name("to_group")));
+    dropdown.selectByVisibleText(group.getName());
   }
 
   private void initContactIncludingInGroup(ContactData contact) {
+    //приходится делать костыль, т.к иначе не работает
+    if(contact.getGroups().size() == 0){
+      Select dropdown = new Select(wd.findElement(By.name("group")));
+      dropdown.selectByVisibleText("[none]");
+    }
     click(By.cssSelector(String.format("input[type = 'checkbox'][id = '%s']", contact.getId())));
   }
 
@@ -191,6 +212,8 @@ public class ContactHelper extends HelperBase {
     GroupData group = selectGroupRemoving(contact);
     initContactIncludingInGroup(contact);
     submitContactRemovingFromGroup(contact);
+    waitMessage(500);
+    goHome();
     return group;
   }
 
