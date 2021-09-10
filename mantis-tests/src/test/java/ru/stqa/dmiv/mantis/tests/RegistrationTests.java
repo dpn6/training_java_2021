@@ -1,8 +1,6 @@
 package ru.stqa.dmiv.mantis.tests;
 
-import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import ru.lanwen.verbalregex.VerbalExpression;
 import ru.stqa.dmiv.mantis.model.MailMessage;
@@ -11,11 +9,13 @@ import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.List;
 
-import static org.testng.Assert.*;
+import static org.testng.Assert.assertTrue;
 
 public class RegistrationTests extends TestBase {
+  String user = null;
+  String password = "password";
 
-//  @BeforeMethod
+  //  @BeforeMethod
   public void startMailServer() {
     app.mail().start();
   }
@@ -23,9 +23,7 @@ public class RegistrationTests extends TestBase {
   @Test
   public void testRegistration() throws IOException, MessagingException {
     long now = System.currentTimeMillis();
-    String user = String.format("user%s", now);
-    String password = "password";
-//    String email = String.format("user%s@localhost.localdomain", now);
+    user = String.format("user%s", now);
     String email = String.format("user%s@localhost", now);
     app.james().createUser(user, password);
     app.registration().start(user, email);
@@ -42,7 +40,15 @@ public class RegistrationTests extends TestBase {
     return regex.getText(message.text);
   }
 
-//  @AfterMethod(alwaysRun = true)
+  @AfterMethod(alwaysRun = true)
+  //чтобы при повторном запуске тестов на смену пароля не было предыдущих писем с подтверждающей ссылкой
+  void deleteUserEmail() throws MessagingException {
+    if (user != null){
+      app.james().drainEmail(user, password);
+    }
+  }
+
+  //  @AfterMethod(alwaysRun = true)
   public void stopMailServer() {
     app.mail().stop();
   }

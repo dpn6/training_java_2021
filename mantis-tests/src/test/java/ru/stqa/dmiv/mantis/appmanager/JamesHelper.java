@@ -170,4 +170,11 @@ public class JamesHelper {
   }
 
 
+  public void drainEmail(String username, String password) throws MessagingException {
+    Folder inbox = openInbox(username, password);
+    for(Message m : inbox.getMessages()){
+      m.setFlag(Flags.Flag.DELETED, true);
+    }
+    closeFolder(inbox);
+  }
 }

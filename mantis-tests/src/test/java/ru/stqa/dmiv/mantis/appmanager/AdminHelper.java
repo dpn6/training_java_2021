@@ -3,9 +3,9 @@ package ru.stqa.dmiv.mantis.appmanager;
 import org.openqa.selenium.By;
 import ru.stqa.dmiv.mantis.model.UserData;
 
-public class WebHelper extends HelperBase {
+public class AdminHelper extends HelperBase {
 
-  public WebHelper(ApplicationManager app) {
+  public AdminHelper(ApplicationManager app) {
     super(app);
   }
 
@@ -25,7 +25,6 @@ public class WebHelper extends HelperBase {
 
   public void changePassword(String confirmationLink, String password) {
     wd.get(confirmationLink);
-//    type(By.name("login"), login);
     type(By.name("password"), password);
     type(By.name("password_confirm"), password);
     click(By.cssSelector("button[type='submit']"));

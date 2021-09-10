@@ -22,7 +22,7 @@ public class ApplicationManager {
   private FtpHelper ftpHelper;
   private MailHelper mail;
   private JamesHelper james;
-  private WebHelper webHelper;
+  private AdminHelper adminHelper;
   private DbHelper dbHelper;
 
   public ApplicationManager(String browser) {
@@ -77,11 +77,11 @@ public class ApplicationManager {
     return james;
   }
 
-  public WebHelper web(){
-    if (webHelper == null){
-      webHelper = new WebHelper(this);
+  public AdminHelper adm(){
+    if (adminHelper == null){
+      adminHelper = new AdminHelper(this);
     }
-    return webHelper;
+    return adminHelper;
   }
 
   public DbHelper db(){
