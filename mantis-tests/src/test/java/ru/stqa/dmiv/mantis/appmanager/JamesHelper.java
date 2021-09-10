@@ -1,6 +1,7 @@
 package ru.stqa.dmiv.mantis.appmanager;
 
 import org.apache.commons.net.telnet.TelnetClient;
+import ru.lanwen.verbalregex.VerbalExpression;
 import ru.stqa.dmiv.mantis.model.MailMessage;
 
 import javax.mail.*;
@@ -132,6 +133,10 @@ public class JamesHelper {
 
   public static MailMessage toModelMail(Message m) {
     try {
+      for (int i = 0; i < m.getAllRecipients().length; i++) {
+        System.out.println(i + " " + m.getAllRecipients()[i].toString());
+        System.out.println(i + " Content:  " + (String) m.getContent());
+      }
       return new MailMessage(m.getAllRecipients()[0].toString(), (String) m.getContent());
     } catch (MessagingException e) {
       e.printStackTrace();
@@ -142,12 +147,21 @@ public class JamesHelper {
     }
   }
 
+  public String findConfirmationLink(List<MailMessage> mailMessages, String email) {
+    MailMessage message = mailMessages.stream().filter(m -> m.to.equals(email)).findFirst().get();
+    VerbalExpression regex = VerbalExpression.regex().find("http://").nonSpace().oneOrMore().build();
+    return regex.getText(message.text);
+  }
+
   private void closeFolder(Folder folder) throws MessagingException {
     folder.close(true);
     store.close();
   }
 
   private Folder openInbox(String username, String password) throws MessagingException {
+    if (mailserver == null) {
+      mailserver = app.getProperty("mailserver.host");
+    }
     store = mailSession.getStore("pop3");
     store.connect(mailserver, username, password);
     Folder folder = store.getDefaultFolder().getFolder("INBOX");

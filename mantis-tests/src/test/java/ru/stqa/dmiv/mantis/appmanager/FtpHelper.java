@@ -1,7 +1,6 @@
 package ru.stqa.dmiv.mantis.appmanager;
 
 import org.apache.commons.net.ftp.FTPClient;
-import sun.net.ftp.FtpClient;
 
 import java.io.File;
 import java.io.FileInputStream;

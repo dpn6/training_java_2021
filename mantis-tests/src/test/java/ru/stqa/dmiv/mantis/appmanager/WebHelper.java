@@ -22,4 +22,12 @@ public class WebHelper extends HelperBase {
     type(By.name("password"), app.getProperty("web.adminPassword"));
     click(By.cssSelector("input[type='submit']"));
   }
+
+  public void changePassword(String confirmationLink, String password) {
+    wd.get(confirmationLink);
+//    type(By.name("login"), login);
+    type(By.name("password"), password);
+    type(By.name("password_confirm"), password);
+    click(By.cssSelector("button[type='submit']"));
+  }
 }

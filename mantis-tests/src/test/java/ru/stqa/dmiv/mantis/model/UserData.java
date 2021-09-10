@@ -33,4 +33,13 @@ public class UserData {
   public String getEmail() {
     return email;
   }
+
+  @Override
+  public String toString() {
+    return "UserData{" +
+            "id=" + id +
+            ", username='" + username + '\'' +
+            ", email='" + email + '\'' +
+            '}';
+  }
 }
