@@ -7,7 +7,6 @@ import ru.stqa.dmiv.mantis.model.Issue;
 import ru.stqa.dmiv.mantis.model.Project;
 
 import javax.xml.rpc.ServiceException;
-import java.math.BigInteger;
 import java.net.MalformedURLException;
 import java.rmi.RemoteException;
 import java.util.Set;

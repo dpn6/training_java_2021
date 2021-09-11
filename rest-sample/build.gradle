@@ -1,0 +1,16 @@
+import org.gradle.api.tasks.testing.Test
+
+apply plugin: 'java'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.testng:testng:7.4.0'
+    implementation 'com.google.code.gson:gson:2.8.8'
+    implementation 'com.github.alotuser:httpclients:1.7.7'
+//    implementation 'org.wso2.orbit.org.apache.httpcomponents:httpclient:4.3.6.wso2v3'
+    implementation 'org.apache.httpcomponents:httpclient:4.5.1'
+}
+
