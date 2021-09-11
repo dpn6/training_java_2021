@@ -30,7 +30,7 @@ public class SoapHelper {
 
   private MantisConnectPortType getMantisConnect() throws ServiceException, MalformedURLException {
     return new MantisConnectLocator()
-              .getMantisConnectPort(new URL("http://localhost/mantisbt-2.25.2/api/soap/mantisconnect.php"));
+            .getMantisConnectPort(new URL("http://localhost/mantisbt-2.25.2/api/soap/mantisconnect.php"));
   }
 
 
@@ -53,5 +53,39 @@ public class SoapHelper {
             .withProject(new Project()
                     .withId(createdIssueData.getProject().getId().intValue())
                     .withName(createdIssueData.getProject().getName()));
+  }
+
+  public boolean isIssueOpen(int issueId) throws MalformedURLException, ServiceException, RemoteException {
+    MantisConnectPortType mc = getMantisConnect();
+    IssueData issueData = mc.mc_issue_get("administrator", "root", BigInteger.valueOf(issueId));
+
+    if (issueData == null) {
+      return false;
+    }
+
+    if (issueData.getStatus().getName().equals("closed")) {
+      return false;
+    }
+
+    return true;
+  }
+
+  public void closeIssue(Issue issue) throws MalformedURLException, ServiceException, RemoteException {
+    MantisConnectPortType mc = getMantisConnect();
+    String[] categories = mc.mc_project_get_categories("administrator",
+            "root", BigInteger.valueOf(issue.getProject().getId()));
+    ObjectRef[] statuses = mc.mc_enum_status("administrator", "root");
+    System.out.println();
+    ObjectRef statusClose = Arrays.asList(statuses).stream().filter(s -> s.getName().equals("closed")).findAny().get();
+    IssueData updated = new IssueData();
+    updated.setId(BigInteger.valueOf(issue.getId()));
+    updated.setStatus(statusClose);
+    updated.setSummary(issue.getSummary());
+    updated.setDescription(issue.getDescription());
+    updated.setStatus(statusClose);
+    updated.setProject(new ObjectRef(BigInteger.valueOf(issue.getProject().getId()), issue.getProject().getName()));
+    updated.setCategory(categories[0]);
+
+    mc.mc_issue_update("administrator", "root", BigInteger.valueOf(issue.getId()), updated);
   }
 }
