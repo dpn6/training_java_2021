@@ -12,5 +12,6 @@ dependencies {
     implementation 'com.github.alotuser:httpclients:1.7.7'
 //    implementation 'org.wso2.orbit.org.apache.httpcomponents:httpclient:4.3.6.wso2v3'
     implementation 'org.apache.httpcomponents:httpclient:4.5.1'
+    implementation 'org.apache.httpcomponents:fluent-hc:4.5.1'
 }
 
