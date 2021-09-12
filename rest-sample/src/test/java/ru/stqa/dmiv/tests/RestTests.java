@@ -1,4 +1,4 @@
-package ru.stqa.dmiv.rest;
+package ru.stqa.dmiv.tests;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -9,8 +9,11 @@ import org.apache.http.client.fluent.Request;
 import org.apache.http.message.BasicNameValuePair;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import ru.stqa.dmiv.rest.Issue;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.rmi.RemoteException;
 import java.util.List;
 import java.util.Set;
 
@@ -51,4 +54,5 @@ public class RestTests {
     JsonElement parsed = parseString(json);
     return parsed.getAsJsonObject().get("issue_id").getAsInt();
   }
+
 }

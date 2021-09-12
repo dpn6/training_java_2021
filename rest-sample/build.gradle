@@ -13,5 +13,6 @@ dependencies {
 //    implementation 'org.wso2.orbit.org.apache.httpcomponents:httpclient:4.3.6.wso2v3'
     implementation 'org.apache.httpcomponents:httpclient:4.5.1'
     implementation 'org.apache.httpcomponents:fluent-hc:4.5.1'
+    implementation 'com.jayway.restassured:rest-assured:2.9.0'
 }
 
