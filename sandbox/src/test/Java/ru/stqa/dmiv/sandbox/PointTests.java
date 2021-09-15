@@ -9,7 +9,8 @@ public class PointTests {
   public void testPoint1() {
     Point p1 = new Point(7, 11);
     Point p2 = new Point(4, 7);
-    Assert.assertEquals(p1.distance(p2), 5.0);
+//    Assert.assertEquals(p1.distance(p2), 5.0);
+    Assert.assertEquals(p1.distance(p2), 5); //испорчен для проверки jenkins
   }
 
   @Test
