@@ -4,7 +4,7 @@
     <test name="Groups">
         <classes>
             <class name="ru.stqa.dmiv.addressbook.tests.GroupModificationTests"/>
-            <class name="ru.stqa.dmiv.addressbook.tests.GroupDeletionTests"/>
+<!--            <class name="ru.stqa.dmiv.addressbook.tests.GroupDeletionTests"/>-->
         </classes>
     </test>
 </suite>
